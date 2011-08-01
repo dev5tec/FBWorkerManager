@@ -1,0 +1,455 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C4B821A13E64420008A7088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821913E64420008A7088 /* UIKit.framework */; };
+		4C4B821C13E64420008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
+		4C4B821E13E64420008A7088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821D13E64420008A7088 /* CoreGraphics.framework */; };
+		4C4B822413E64420008A7088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B822213E64420008A7088 /* InfoPlist.strings */; };
+		4C4B822613E64420008A7088 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B822513E64420008A7088 /* main.m */; };
+		4C4B822A13E64420008A7088 /* LKWorkerManagerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B822913E64420008A7088 /* LKWorkerManagerAppDelegate.m */; };
+		4C4B822D13E64420008A7088 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B822B13E64420008A7088 /* MainWindow.xib */; };
+		4C4B823013E64420008A7088 /* LKWorkerManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B822F13E64420008A7088 /* LKWorkerManagerViewController.m */; };
+		4C4B823313E64420008A7088 /* LKWorkerManagerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B823113E64420008A7088 /* LKWorkerManagerViewController.xib */; };
+		4C4B823B13E64421008A7088 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B823A13E64421008A7088 /* SenTestingKit.framework */; };
+		4C4B823C13E64421008A7088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821913E64420008A7088 /* UIKit.framework */; };
+		4C4B823D13E64421008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
+		4C4B823E13E64421008A7088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821D13E64420008A7088 /* CoreGraphics.framework */; };
+		4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824413E64421008A7088 /* InfoPlist.strings */; };
+		4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */; };
+		4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C4B823F13E64421008A7088 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C4B820C13E64420008A7088 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C4B821413E64420008A7088;
+			remoteInfo = LKWorkerManager;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C4B821513E64420008A7088 /* LKWorkerManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LKWorkerManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C4B821913E64420008A7088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4C4B821B13E64420008A7088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4C4B821D13E64420008A7088 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4C4B822113E64420008A7088 /* LKWorkerManager-Info.plist */ = {isa = PBXFileReference; path = "LKWorkerManager-Info.plist"; sourceTree = "<group>"; };
+		4C4B822313E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C4B822513E64420008A7088 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4C4B822713E64420008A7088 /* LKWorkerManager-Prefix.pch */ = {isa = PBXFileReference; path = "LKWorkerManager-Prefix.pch"; sourceTree = "<group>"; };
+		4C4B822813E64420008A7088 /* LKWorkerManagerAppDelegate.h */ = {isa = PBXFileReference; path = LKWorkerManagerAppDelegate.h; sourceTree = "<group>"; };
+		4C4B822913E64420008A7088 /* LKWorkerManagerAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerAppDelegate.m; sourceTree = "<group>"; };
+		4C4B822C13E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		4C4B822E13E64420008A7088 /* LKWorkerManagerViewController.h */ = {isa = PBXFileReference; path = LKWorkerManagerViewController.h; sourceTree = "<group>"; };
+		4C4B822F13E64420008A7088 /* LKWorkerManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerViewController.m; sourceTree = "<group>"; };
+		4C4B823213E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LKWorkerManagerViewController.xib; sourceTree = "<group>"; };
+		4C4B823913E64421008A7088 /* LKWorkerManagerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LKWorkerManagerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C4B823A13E64421008A7088 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		4C4B824313E64421008A7088 /* LKWorkerManagerTests-Info.plist */ = {isa = PBXFileReference; path = "LKWorkerManagerTests-Info.plist"; sourceTree = "<group>"; };
+		4C4B824513E64421008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerTests.h; sourceTree = "<group>"; };
+		4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C4B821213E64420008A7088 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B821A13E64420008A7088 /* UIKit.framework in Frameworks */,
+				4C4B821C13E64420008A7088 /* Foundation.framework in Frameworks */,
+				4C4B821E13E64420008A7088 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C4B823513E64421008A7088 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B823B13E64421008A7088 /* SenTestingKit.framework in Frameworks */,
+				4C4B823C13E64421008A7088 /* UIKit.framework in Frameworks */,
+				4C4B823D13E64421008A7088 /* Foundation.framework in Frameworks */,
+				4C4B823E13E64421008A7088 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C4B820A13E64420008A7088 = {
+			isa = PBXGroup;
+			children = (
+				4C4B821F13E64420008A7088 /* LKWorkerManager */,
+				4C4B824113E64421008A7088 /* LKWorkerManagerTests */,
+				4C4B821813E64420008A7088 /* Frameworks */,
+				4C4B821613E64420008A7088 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C4B821613E64420008A7088 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B821513E64420008A7088 /* LKWorkerManager.app */,
+				4C4B823913E64421008A7088 /* LKWorkerManagerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C4B821813E64420008A7088 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B821913E64420008A7088 /* UIKit.framework */,
+				4C4B821B13E64420008A7088 /* Foundation.framework */,
+				4C4B821D13E64420008A7088 /* CoreGraphics.framework */,
+				4C4B823A13E64421008A7088 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4C4B821F13E64420008A7088 /* LKWorkerManager */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B822813E64420008A7088 /* LKWorkerManagerAppDelegate.h */,
+				4C4B822913E64420008A7088 /* LKWorkerManagerAppDelegate.m */,
+				4C4B822B13E64420008A7088 /* MainWindow.xib */,
+				4C4B822E13E64420008A7088 /* LKWorkerManagerViewController.h */,
+				4C4B822F13E64420008A7088 /* LKWorkerManagerViewController.m */,
+				4C4B823113E64420008A7088 /* LKWorkerManagerViewController.xib */,
+				4C4B822013E64420008A7088 /* Supporting Files */,
+			);
+			path = LKWorkerManager;
+			sourceTree = "<group>";
+		};
+		4C4B822013E64420008A7088 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B822113E64420008A7088 /* LKWorkerManager-Info.plist */,
+				4C4B822213E64420008A7088 /* InfoPlist.strings */,
+				4C4B822513E64420008A7088 /* main.m */,
+				4C4B822713E64420008A7088 /* LKWorkerManager-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C4B824113E64421008A7088 /* LKWorkerManagerTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */,
+				4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */,
+				4C4B824213E64421008A7088 /* Supporting Files */,
+			);
+			path = LKWorkerManagerTests;
+			sourceTree = "<group>";
+		};
+		4C4B824213E64421008A7088 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B824313E64421008A7088 /* LKWorkerManagerTests-Info.plist */,
+				4C4B824413E64421008A7088 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C4B821413E64420008A7088 /* LKWorkerManager */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C4B824D13E64421008A7088 /* Build configuration list for PBXNativeTarget "LKWorkerManager" */;
+			buildPhases = (
+				4C4B821113E64420008A7088 /* Sources */,
+				4C4B821213E64420008A7088 /* Frameworks */,
+				4C4B821313E64420008A7088 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LKWorkerManager;
+			productName = LKWorkerManager;
+			productReference = 4C4B821513E64420008A7088 /* LKWorkerManager.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C4B823813E64421008A7088 /* LKWorkerManagerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C4B825013E64421008A7088 /* Build configuration list for PBXNativeTarget "LKWorkerManagerTests" */;
+			buildPhases = (
+				4C4B823413E64421008A7088 /* Sources */,
+				4C4B823513E64421008A7088 /* Frameworks */,
+				4C4B823613E64421008A7088 /* Resources */,
+				4C4B823713E64421008A7088 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C4B824013E64421008A7088 /* PBXTargetDependency */,
+			);
+			name = LKWorkerManagerTests;
+			productName = LKWorkerManagerTests;
+			productReference = 4C4B823913E64421008A7088 /* LKWorkerManagerTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C4B820C13E64420008A7088 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 4C4B820F13E64420008A7088 /* Build configuration list for PBXProject "LKWorkerManager" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4C4B820A13E64420008A7088;
+			productRefGroup = 4C4B821613E64420008A7088 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C4B821413E64420008A7088 /* LKWorkerManager */,
+				4C4B823813E64421008A7088 /* LKWorkerManagerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C4B821313E64420008A7088 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B822413E64420008A7088 /* InfoPlist.strings in Resources */,
+				4C4B822D13E64420008A7088 /* MainWindow.xib in Resources */,
+				4C4B823313E64420008A7088 /* LKWorkerManagerViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C4B823613E64421008A7088 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */,
+				4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C4B823713E64421008A7088 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C4B821113E64420008A7088 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B822613E64420008A7088 /* main.m in Sources */,
+				4C4B822A13E64420008A7088 /* LKWorkerManagerAppDelegate.m in Sources */,
+				4C4B823013E64420008A7088 /* LKWorkerManagerViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C4B823413E64421008A7088 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C4B824013E64421008A7088 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C4B821413E64420008A7088 /* LKWorkerManager */;
+			targetProxy = 4C4B823F13E64421008A7088 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4C4B822213E64420008A7088 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C4B822313E64420008A7088 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4C4B822B13E64420008A7088 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C4B822C13E64420008A7088 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		4C4B823113E64420008A7088 /* LKWorkerManagerViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C4B823213E64420008A7088 /* en */,
+			);
+			name = LKWorkerManagerViewController.xib;
+			sourceTree = "<group>";
+		};
+		4C4B824413E64421008A7088 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C4B824513E64421008A7088 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4C4B824B13E64421008A7088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4C4B824C13E64421008A7088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C4B824E13E64421008A7088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "LKWorkerManager/LKWorkerManager-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4C4B824F13E64421008A7088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "LKWorkerManager/LKWorkerManager-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4C4B825113E64421008A7088 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LKWorkerManager.app/LKWorkerManager";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "LKWorkerManagerTests/LKWorkerManagerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		4C4B825213E64421008A7088 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LKWorkerManager.app/LKWorkerManager";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "LKWorkerManagerTests/LKWorkerManagerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C4B820F13E64420008A7088 /* Build configuration list for PBXProject "LKWorkerManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4B824B13E64421008A7088 /* Debug */,
+				4C4B824C13E64421008A7088 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C4B824D13E64421008A7088 /* Build configuration list for PBXNativeTarget "LKWorkerManager" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4B824E13E64421008A7088 /* Debug */,
+				4C4B824F13E64421008A7088 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4C4B825013E64421008A7088 /* Build configuration list for PBXNativeTarget "LKWorkerManagerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C4B825113E64421008A7088 /* Debug */,
+				4C4B825213E64421008A7088 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C4B820C13E64420008A7088 /* Project object */;
+}
