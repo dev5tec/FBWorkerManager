@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C04D9D013E92C88001A300A /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9CE13E92C88001A300A /* pause.png */; };
+		4C04D9D313E93068001A300A /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9D213E93068001A300A /* play.png */; };
+		4C04D9D513E93213001A300A /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9D413E93213001A300A /* cancel.png */; };
+		4C04D9D813E93D4D001A300A /* Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04D9D713E93D4D001A300A /* Sample.m */; };
+		4C0E5A7813E7DBA400D56EDE /* FBNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7713E7DBA400D56EDE /* FBNetworkReachability.m */; };
+		4C0E5A7913E7DBA400D56EDE /* FBNetworkReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7713E7DBA400D56EDE /* FBNetworkReachability.m */; };
+		4C0E5A7C13E7E1A200D56EDE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0E5A7B13E7E1A200D56EDE /* SystemConfiguration.framework */; };
+		4C0E5A7F13E7E3A500D56EDE /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7E13E7E3A500D56EDE /* MyCell.m */; };
+		4C0E5A8013E7E3A500D56EDE /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7E13E7E3A500D56EDE /* MyCell.m */; };
+		4C0E5A8213E7E3B500D56EDE /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E5A8113E7E3B500D56EDE /* MyCell.xib */; };
+		4C0E5A8313E7E3B500D56EDE /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E5A8113E7E3B500D56EDE /* MyCell.xib */; };
 		4C4B821A13E64420008A7088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821913E64420008A7088 /* UIKit.framework */; };
 		4C4B821C13E64420008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
 		4C4B821E13E64420008A7088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821D13E64420008A7088 /* CoreGraphics.framework */; };
@@ -23,6 +34,8 @@
 		4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824413E64421008A7088 /* InfoPlist.strings */; };
 		4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */; };
 		4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */; };
+		4C4B825613E6449A008A7088 /* LKWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* LKWorkerManager.m */; };
+		4C4B825713E6449A008A7088 /* LKWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* LKWorkerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,26 +49,41 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C04D9CE13E92C88001A300A /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
+		4C04D9D213E93068001A300A /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		4C04D9D413E93213001A300A /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
+		4C04D9D613E93D4C001A300A /* Sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample.h; sourceTree = "<group>"; };
+		4C04D9D713E93D4D001A300A /* Sample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample.m; sourceTree = "<group>"; };
+		4C0E5A7613E7DBA400D56EDE /* FBNetworkReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBNetworkReachability.h; sourceTree = "<group>"; };
+		4C0E5A7713E7DBA400D56EDE /* FBNetworkReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBNetworkReachability.m; sourceTree = "<group>"; };
+		4C0E5A7B13E7E1A200D56EDE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4C0E5A7D13E7E3A500D56EDE /* MyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCell.h; sourceTree = "<group>"; };
+		4C0E5A7E13E7E3A500D56EDE /* MyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCell.m; sourceTree = "<group>"; };
+		4C0E5A8113E7E3B500D56EDE /* MyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyCell.xib; path = ../MyCell.xib; sourceTree = "<group>"; };
 		4C4B821513E64420008A7088 /* LKWorkerManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LKWorkerManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C4B821913E64420008A7088 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		4C4B821B13E64420008A7088 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C4B821D13E64420008A7088 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		4C4B822113E64420008A7088 /* LKWorkerManager-Info.plist */ = {isa = PBXFileReference; path = "LKWorkerManager-Info.plist"; sourceTree = "<group>"; };
+		4C4B822113E64420008A7088 /* LKWorkerManager-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LKWorkerManager-Info.plist"; sourceTree = "<group>"; };
 		4C4B822313E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C4B822513E64420008A7088 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4C4B822713E64420008A7088 /* LKWorkerManager-Prefix.pch */ = {isa = PBXFileReference; path = "LKWorkerManager-Prefix.pch"; sourceTree = "<group>"; };
-		4C4B822813E64420008A7088 /* LKWorkerManagerAppDelegate.h */ = {isa = PBXFileReference; path = LKWorkerManagerAppDelegate.h; sourceTree = "<group>"; };
+		4C4B822713E64420008A7088 /* LKWorkerManager-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LKWorkerManager-Prefix.pch"; sourceTree = "<group>"; };
+		4C4B822813E64420008A7088 /* LKWorkerManagerAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerAppDelegate.h; sourceTree = "<group>"; };
 		4C4B822913E64420008A7088 /* LKWorkerManagerAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerAppDelegate.m; sourceTree = "<group>"; };
 		4C4B822C13E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		4C4B822E13E64420008A7088 /* LKWorkerManagerViewController.h */ = {isa = PBXFileReference; path = LKWorkerManagerViewController.h; sourceTree = "<group>"; };
+		4C4B822E13E64420008A7088 /* LKWorkerManagerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerViewController.h; sourceTree = "<group>"; };
 		4C4B822F13E64420008A7088 /* LKWorkerManagerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerViewController.m; sourceTree = "<group>"; };
 		4C4B823213E64420008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LKWorkerManagerViewController.xib; sourceTree = "<group>"; };
 		4C4B823913E64421008A7088 /* LKWorkerManagerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LKWorkerManagerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C4B823A13E64421008A7088 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		4C4B824313E64421008A7088 /* LKWorkerManagerTests-Info.plist */ = {isa = PBXFileReference; path = "LKWorkerManagerTests-Info.plist"; sourceTree = "<group>"; };
+		4C4B824313E64421008A7088 /* LKWorkerManagerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LKWorkerManagerTests-Info.plist"; sourceTree = "<group>"; };
 		4C4B824513E64421008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerTests.h; sourceTree = "<group>"; };
 		4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerTests.m; sourceTree = "<group>"; };
+		4C4B825413E6449A008A7088 /* LKWorkerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKWorkerManager.h; sourceTree = "<group>"; };
+		4C4B825513E6449A008A7088 /* LKWorkerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManager.m; sourceTree = "<group>"; };
+		4C4B825813E644AB008A7088 /* LKWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKWorker.h; sourceTree = "<group>"; };
+		4C4B825C13E644C4008A7088 /* LKWorkerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKWorkerQueue.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C0E5A7C13E7E1A200D56EDE /* SystemConfiguration.framework in Frameworks */,
 				4C4B821A13E64420008A7088 /* UIKit.framework in Frameworks */,
 				4C4B821C13E64420008A7088 /* Foundation.framework in Frameworks */,
 				4C4B821E13E64420008A7088 /* CoreGraphics.framework in Frameworks */,
@@ -86,7 +115,9 @@
 		4C4B820A13E64420008A7088 = {
 			isa = PBXGroup;
 			children = (
-				4C4B821F13E64420008A7088 /* LKWorkerManager */,
+				4C0E5A7B13E7E1A200D56EDE /* SystemConfiguration.framework */,
+				4C4B825313E6443D008A7088 /* LKWorkerManager */,
+				4C4B821F13E64420008A7088 /* Test Application */,
 				4C4B824113E64421008A7088 /* LKWorkerManagerTests */,
 				4C4B821813E64420008A7088 /* Frameworks */,
 				4C4B821613E64420008A7088 /* Products */,
@@ -113,7 +144,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		4C4B821F13E64420008A7088 /* LKWorkerManager */ = {
+		4C4B821F13E64420008A7088 /* Test Application */ = {
 			isa = PBXGroup;
 			children = (
 				4C4B822813E64420008A7088 /* LKWorkerManagerAppDelegate.h */,
@@ -122,14 +153,24 @@
 				4C4B822E13E64420008A7088 /* LKWorkerManagerViewController.h */,
 				4C4B822F13E64420008A7088 /* LKWorkerManagerViewController.m */,
 				4C4B823113E64420008A7088 /* LKWorkerManagerViewController.xib */,
+				4C04D9D613E93D4C001A300A /* Sample.h */,
+				4C04D9D713E93D4D001A300A /* Sample.m */,
+				4C0E5A7613E7DBA400D56EDE /* FBNetworkReachability.h */,
+				4C0E5A7713E7DBA400D56EDE /* FBNetworkReachability.m */,
 				4C4B822013E64420008A7088 /* Supporting Files */,
+				4C0E5A7D13E7E3A500D56EDE /* MyCell.h */,
+				4C0E5A7E13E7E3A500D56EDE /* MyCell.m */,
+				4C0E5A8113E7E3B500D56EDE /* MyCell.xib */,
 			);
-			path = LKWorkerManager;
+			path = "Test Application";
 			sourceTree = "<group>";
 		};
 		4C4B822013E64420008A7088 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4C04D9D413E93213001A300A /* cancel.png */,
+				4C04D9D213E93068001A300A /* play.png */,
+				4C04D9CE13E92C88001A300A /* pause.png */,
 				4C4B822113E64420008A7088 /* LKWorkerManager-Info.plist */,
 				4C4B822213E64420008A7088 /* InfoPlist.strings */,
 				4C4B822513E64420008A7088 /* main.m */,
@@ -155,6 +196,17 @@
 				4C4B824413E64421008A7088 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4C4B825313E6443D008A7088 /* LKWorkerManager */ = {
+			isa = PBXGroup;
+			children = (
+				4C4B825413E6449A008A7088 /* LKWorkerManager.h */,
+				4C4B825513E6449A008A7088 /* LKWorkerManager.m */,
+				4C4B825813E644AB008A7088 /* LKWorker.h */,
+				4C4B825C13E644C4008A7088 /* LKWorkerQueue.h */,
+			);
+			path = LKWorkerManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -227,6 +279,10 @@
 				4C4B822413E64420008A7088 /* InfoPlist.strings in Resources */,
 				4C4B822D13E64420008A7088 /* MainWindow.xib in Resources */,
 				4C4B823313E64420008A7088 /* LKWorkerManagerViewController.xib in Resources */,
+				4C0E5A8213E7E3B500D56EDE /* MyCell.xib in Resources */,
+				4C04D9D013E92C88001A300A /* pause.png in Resources */,
+				4C04D9D313E93068001A300A /* play.png in Resources */,
+				4C04D9D513E93213001A300A /* cancel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +292,7 @@
 			files = (
 				4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */,
 				4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */,
+				4C0E5A8313E7E3B500D56EDE /* MyCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +322,10 @@
 				4C4B822613E64420008A7088 /* main.m in Sources */,
 				4C4B822A13E64420008A7088 /* LKWorkerManagerAppDelegate.m in Sources */,
 				4C4B823013E64420008A7088 /* LKWorkerManagerViewController.m in Sources */,
+				4C4B825613E6449A008A7088 /* LKWorkerManager.m in Sources */,
+				4C0E5A7813E7DBA400D56EDE /* FBNetworkReachability.m in Sources */,
+				4C0E5A7F13E7E3A500D56EDE /* MyCell.m in Sources */,
+				4C04D9D813E93D4D001A300A /* Sample.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +334,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */,
+				4C4B825713E6449A008A7088 /* LKWorkerManager.m in Sources */,
+				4C0E5A7913E7DBA400D56EDE /* FBNetworkReachability.m in Sources */,
+				4C0E5A8013E7E3A500D56EDE /* MyCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,8 +433,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
-				INFOPLIST_FILE = "LKWorkerManager/LKWorkerManager-Info.plist";
+				GCC_PREFIX_HEADER = "Test Application/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "Test Application/LKWorkerManager-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -380,8 +444,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LKWorkerManager/LKWorkerManager-Prefix.pch";
-				INFOPLIST_FILE = "LKWorkerManager/LKWorkerManager-Info.plist";
+				GCC_PREFIX_HEADER = "Test Application/LKWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "Test Application/LKWorkerManager-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -440,6 +504,7 @@
 				4C4B824F13E64421008A7088 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4C4B825013E64421008A7088 /* Build configuration list for PBXNativeTarget "LKWorkerManagerTests" */ = {
 			isa = XCConfigurationList;
@@ -448,6 +513,7 @@
 				4C4B825213E64421008A7088 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
