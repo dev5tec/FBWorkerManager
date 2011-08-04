@@ -10,34 +10,18 @@
 #import "LKWorkerManager.h"
 
 @implementation Sample
-@synthesize title, status, time, progress;
-- (BOOL)executeOnWorkerManager:(LKWorkerManager *)workerManager
+@synthesize title, workerState, time, progress;
+- (BOOL)executeWithWorkerManager:(LKWorkerManager *)workerManager
 {
     while (self.progress < 1.0) {
-        if (![self.status isEqualToString:STATUS_LABEL_WORKING]) {
+        if (self.workerState != LKWorkerStateExecuting) {
             return NO;
         }
         [NSThread sleepForTimeInterval:0.2];
         self.progress += 0.05;
         [workerManager notifyUpdatedWorker:self];
     }
-    self.status = STATUS_LABEL_FINISHED;
     return YES;
-}
-
-- (void)pauseOnWorkerManager:(LKWorkerManager*)workerManager
-{
-    self.status = STATUS_LABEL_PAUSED;
-}
-
-- (void)resumeOnWorkerManager:(LKWorkerManager*)workerManager
-{
-    self.status = STATUS_LABEL_WAITING;
-}
-
--(void)cancelOnWorkerManager:(LKWorkerManager*)workerManager
-{
-    self.status = STATUS_LABEL_CANCELED;
 }
 
 @end

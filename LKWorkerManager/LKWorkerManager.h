@@ -13,9 +13,8 @@
 
 typedef enum {
     LKWorkerManagerStateStopping = 0,
-    LKWorkerManagerStateWaiting,
     LKWorkerManagerStateRunning,
-    LKWorkerManagerStatePausing
+    LKWorkerManagerStateSuspending,
 } LKWorkerManagerState;
 
 //------------------------------------------------------------------------------
@@ -27,7 +26,6 @@ typedef enum {
 - (void)willBeginWorkerManager:(LKWorkerManager*)workerManager worker:(id <LKWorker>)worker;
 - (void)didUpdateWorkerManager:(LKWorkerManager*)workerManager worker:(id <LKWorker>)worker;
 - (void)didFinishWorkerManager:(LKWorkerManager*)workerManager worker:(id <LKWorker>)worker;
-- (void)didCancelWorkerManager:(LKWorkerManager*)workerManager worker:(id <LKWorker>)worker;
 
 @end
 
@@ -37,6 +35,7 @@ typedef enum {
 // API (properties)
 @property (nonatomic, assign) NSTimeInterval interval;
 @property (nonatomic, assign) id <LKWorkerManagerDelegate> delegate;
+@property (nonatomic, assign) NSUInteger maxWorkers;
 
 // API (properties, readonly)
 @property (assign, readonly) LKWorkerManagerState state;
@@ -46,7 +45,9 @@ typedef enum {
 // API (general)
 + (LKWorkerManager*)workerManagerWithWorkerQueue:(id <LKWorkerQueue>)workerQueue;
 - (void)start;
-- (void)pauseAll;
+- (void)stop;
+
+- (void)suspendAll;
 - (void)resumeAll;
 - (void)cancelAll;
 
@@ -55,7 +56,7 @@ typedef enum {
 
 // API (for controller)
 - (void)cancelWorker:(id <LKWorker>)worker;
-- (void)pauseWorker:(id <LKWorker>)worker;
+- (void)suspendWorker:(id <LKWorker>)worker;
 - (void)resumeWorker:(id <LKWorker>)worker;
 
 @end

@@ -8,15 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    LKWorkerStateWaiting = 0,
+    LKWorkerStateExecuting,
+    LKWorkerStateCompleted,
+    LKWorkerStateCanceled,
+    LKWorkerStateSuspending
+} LKWorkerState;
+
+
 @class LKWorkerManager;
 @protocol LKWorker <NSObject>
 
+@property (nonatomic, assign) LKWorkerState workerState;
+
 // return: YES=finished / NO=not finished
-- (BOOL)executeOnWorkerManager:(LKWorkerManager*)workerManager;
+- (BOOL)executeWithWorkerManager:(LKWorkerManager*)workerManager;
+
 
 @optional
-- (void)pauseOnWorkerManager:(LKWorkerManager*)workerManager;
-- (void)resumeOnWorkerManager:(LKWorkerManager*)workerManager;
-- (void)cancelOnWorkerManager:(LKWorkerManager*)workerManager;
+- (void)didSuspendWithWorkerManager:(LKWorkerManager*)workerManager;
+- (void)didResumeWithWorkerManager:(LKWorkerManager*)workerManager;
+- (void)didCancelWithWorkerManager:(LKWorkerManager*)workerManager;
 
 @end

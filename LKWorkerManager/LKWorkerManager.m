@@ -10,6 +10,7 @@
 #import "LKWorker.h"
 
 #define LKWORKERMANAGER_TIMEINTERVAL_FOR_CHECK  1.0
+#define LKWORKERMANAGER_MAX_WORKERS             1
 
 #pragma mark -
 @interface LKWorkerManager()
@@ -23,87 +24,118 @@
 #pragma mark -
 @implementation LKWorkerManager
 @synthesize delegate = delegate_;
+@synthesize maxWorkers = maxWorkers_;
 @synthesize interval = interval_;
 @synthesize state = state_;
 @synthesize workerQueue = workerQueue_;
 @synthesize timer = timer_;
 @synthesize workerSet = workerSet_;
 
-
 #pragma mark -
 #pragma mark Privates
+
+- (BOOL)_checkMaxWorkers
+{
+    if (self.maxWorkers == 0) {
+        return YES;
+    }
+    
+    NSUInteger count = 0;
+    @synchronized (self.workerSet) {
+        for (id <LKWorker> worker in self.workerSet) {
+            if ([worker workerState] == LKWorkerStateExecuting) {
+                count++;
+            }
+        }
+    }
+    return (count < self.maxWorkers);
+}
+
+- (void)_setWorker:(id <LKWorker>)worker workerState:(LKWorkerState)workerSstate
+{
+    [worker setWorkerState:workerSstate];
+    
+    switch (workerSstate) {
+        case LKWorkerStateWaiting:
+            // TODO: resume ?
+            if ([worker respondsToSelector:@selector(didResumeWithWorkerManager:)]) {
+                [worker didResumeWithWorkerManager:self];
+            }
+            break;
+            
+        case LKWorkerStateExecuting:
+            break;
+            
+        case LKWorkerStateSuspending:
+            if ([worker respondsToSelector:@selector(didSuspendWithWorkerManager:)]) {
+                [worker didSuspendWithWorkerManager:self];
+            }
+            break;
+            
+        case LKWorkerStateCompleted:
+            if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate didFinishWorkerManager:self worker:worker];
+                });
+            }
+            break;
+            
+        case LKWorkerStateCanceled:
+            if ([worker respondsToSelector:@selector(didCancelWithWorkerManager:)]) {
+                [worker didCancelWithWorkerManager:self];
+            }
+            if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.delegate didFinishWorkerManager:self worker:worker];
+                });
+            }
+            break;
+
+    }
+}
+
+- (void)_updateWorker:(id <LKWorker>)worker
+{
+    if ([self.delegate respondsToSelector:@selector(didUpdateWorkerManager:worker:)]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.delegate didUpdateWorkerManager:self worker:worker];
+        });
+    }
+}
+
 - (void)_startThread
 {
-    // TODO: multi threading
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-
     id <LKWorker> worker;
-    
+
     while ((worker = [self.workerQueue nextWorker])) {
         @synchronized (self.workerSet) {
             [self.workerSet addObject:worker];
         }
-        dispatch_async(queue, ^{
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             if ([self.delegate respondsToSelector:@selector(willBeginWorkerManager:worker:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate willBeginWorkerManager:self worker:worker];
                 });
             }
             
-            if ([worker executeOnWorkerManager:self]) {           
-                if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.delegate didFinishWorkerManager:self worker:worker];
-                    });
-                }
-                
+            if ([worker executeWithWorkerManager:self]) { 
+                [self _setWorker:worker workerState:LKWorkerStateCompleted];                
                 @synchronized (self.workerSet) {
                     [self.workerSet removeObject:worker];
                 }
             }
-        });        
-    }
-
-    self.state = LKWorkerManagerStateWaiting;
-    
-    return;
-
-    // TODO
-    dispatch_async(queue, ^{
+        });
         
-        while (self.state == LKWorkerManagerStateRunning) {
-            
-            if ([self.workerQueue count] == 0) {
-                self.state = LKWorkerManagerStateWaiting;
-                break;
-            }
-
-            id <LKWorker> worker = [self.workerQueue nextWorker];
-            if (worker == nil) {
-                self.state = LKWorkerManagerStateWaiting;
-                break;
-            }
-
-            if ([self.delegate respondsToSelector:@selector(willBeginWorkerManager:worker:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate willBeginWorkerManager:self worker:worker];
-                });
-            }
-
-            if ([worker executeOnWorkerManager:self]) {
-                if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.delegate didFinishWorkerManager:self worker:worker];
-                    });
-                }
-            }
+        if (![self _checkMaxWorkers]) {
+            break;
         }
-    });
+    }
 }
 
 - (void)_check:(NSTimer*)timer
 {
-    if (self.state != LKWorkerManagerStateWaiting) {
+    if (self.state != LKWorkerManagerStateRunning) {
         return;
     }
 
@@ -117,18 +149,11 @@
         }
     }
     
-    self.state = LKWorkerManagerStateRunning;
-    [self _startThread];
-}
-
-- (void)_updateWorker:(id <LKWorker>)worker
-{
-    if ([self.delegate respondsToSelector:@selector(didUpdateWorkerManager:worker:)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate didUpdateWorkerManager:self worker:worker];
-        });
+    if ([self _checkMaxWorkers]) {
+        [self _startThread];
     }
 }
+
 
 #pragma mark -
 #pragma mark Basics
@@ -139,6 +164,7 @@
     if (self) {
         self.interval = LKWORKERMANAGER_TIMEINTERVAL_FOR_CHECK;
         self.state = LKWorkerManagerStateStopping;
+        self.maxWorkers = LKWORKERMANAGER_MAX_WORKERS;
         self.workerQueue = workerQueue;
         self.workerSet = [NSMutableSet set];
     }
@@ -169,7 +195,7 @@
         return;
     }
 
-    self.state = LKWorkerManagerStateWaiting;
+    self.state = LKWorkerManagerStateRunning;
     [self _check:nil];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:self.interval
                                                   target:self
@@ -178,24 +204,23 @@
                                                  repeats:YES];
 }
 
-// TODO
 - (void)stop
 {
     self.state = LKWorkerManagerStateStopping;
     if ([self.timer isValid]) {
         [self.timer invalidate];
     }
+    [self cancelAll];
     self.timer = nil;   
-    self.state = LKWorkerManagerStateStopping;
 }
 
-- (void)pauseAll
-{    
+- (void)suspendAll
+{
+    self.state = LKWorkerManagerStateSuspending;
+
     @synchronized (self.workerSet) {
         for (id <LKWorker> worker in self.workerSet) {
-            if ([worker respondsToSelector:@selector(pauseOnWorkerManager:)]) {
-                [worker pauseOnWorkerManager:self];
-            }
+            [self _setWorker:worker workerState:LKWorkerStateSuspending];
         }
     }
 }
@@ -204,22 +229,24 @@
 {
     @synchronized (self.workerSet) {
         for (id <LKWorker> worker in self.workerSet) {
-            if ([worker respondsToSelector:@selector(resumeOnWorkerManager:)]) {
-                [worker resumeOnWorkerManager:self];
-            }
+            [self _setWorker:worker workerState:LKWorkerStateWaiting];
         }
     }    
+    self.state = LKWorkerManagerStateRunning;
 }
 
 - (void)cancelAll
 {
     @synchronized (self.workerSet) {
-        for (id <LKWorker> worker in self.workerSet) {
-            if ([worker respondsToSelector:@selector(cancelOnWorkerManager:)]) {
-                [worker cancelOnWorkerManager:self];
-            }
+        id <LKWorker> worker;
+        for (worker in self.workerSet) {
+            [self _setWorker:worker workerState:LKWorkerStateCanceled];
         }
         [self.workerSet removeAllObjects];
+        
+        while ((worker = [self.workerQueue nextWorker])) {
+            [self _setWorker:worker workerState:LKWorkerStateCanceled];
+        }
     }
 }
 
@@ -232,35 +259,27 @@
     [self _updateWorker:worker];
 }
 
+
 #pragma mark -
 #pragma mark API (for controller)
 
-- (void)pauseWorker:(id <LKWorker>)worker
+- (void)suspendWorker:(id <LKWorker>)worker
 {
-    if ([worker respondsToSelector:@selector(pauseOnWorkerManager:)]) {
-        [worker pauseOnWorkerManager:self];
-    }
+    [self _setWorker:worker workerState:LKWorkerStateSuspending];
     [self _updateWorker:worker];
 }
 
 - (void)resumeWorker:(id <LKWorker>)worker
 {
-    if ([worker respondsToSelector:@selector(resumeOnWorkerManager:)]) {
-        [worker resumeOnWorkerManager:self];
-    }    
+    [self _setWorker:worker workerState:LKWorkerStateWaiting];
     [self _updateWorker:worker];
 }
 
 - (void)cancelWorker:(id <LKWorker>)worker
 {
-    if ([worker respondsToSelector:@selector(cancelOnWorkerManager:)]) {
-        [worker cancelOnWorkerManager:self];
-    }        
-
-    if ([self.delegate respondsToSelector:@selector(didCancelWorkerManager:worker:)]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate didCancelWorkerManager:self worker:worker];
-        });
+    [self _setWorker:worker workerState:LKWorkerStateCanceled];
+    @synchronized (self.workerSet) {
+        [self.workerSet removeObject:worker];
     }
 }
 
