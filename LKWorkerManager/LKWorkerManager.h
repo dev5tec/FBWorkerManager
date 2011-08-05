@@ -59,4 +59,7 @@ typedef enum {
 - (void)suspendWorker:(id <LKWorker>)worker;
 - (void)resumeWorker:(id <LKWorker>)worker;
 
+// API (background)
++ (void)enableBackgroundTask;
+
 @end

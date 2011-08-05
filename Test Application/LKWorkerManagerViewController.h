@@ -7,21 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LKWorker.h"
-#import "LKWorkerQueue.h"
 #import "LKWorkerManager.h"
 #import "Sample.h"
+#import "SampleQueue.h"
 
-//-----------------------------------------------------
-@interface SampleQueue : NSObject <LKWorkerQueue>
-@property (nonatomic, retain) NSMutableArray* list;
-- (Sample*)objectAtIndex:(NSUInteger)index;
-- (NSUInteger)indexOf:(Sample*)sample;
-- (void)addSample:(Sample*)sample;
-@end
-
-
-//-----------------------------------------------------
 @interface LKWorkerManagerViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, LKWorkerManagerDelegate> {
     UIBarButtonItem *control;
 }
@@ -33,9 +22,10 @@
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelButton;
 
 - (IBAction)add:(id)sender;
-- (IBAction)pause:(id)sender;
-- (IBAction)resume:(id)sender;
-- (IBAction)cancel:(id)sender;
-- (IBAction)stopStart:(id)sender event:(UIEvent*)event;
+- (IBAction)pauseAllWorkers:(id)sender;
+- (IBAction)resumeAllWorkers:(id)sender;
+- (IBAction)cancelAllWorkers:(id)sender;
+
+- (IBAction)suspendResumeWorker:(id)sender event:(UIEvent*)event;
 - (IBAction)cancelWorker:(id)sender event:(UIEvent*)event;
 @end

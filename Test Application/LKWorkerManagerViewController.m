@@ -14,65 +14,6 @@
 #import "MyCell.h"
 
 
-//------------------------------------------------------------------------------
-@implementation SampleQueue
-@synthesize list;
-
-- (id)init {
-    self = [super init];
-    if (self) {
-        self.list = [NSMutableArray array];
-    }
-    return self;
-}
-
-- (Sample*)objectAtIndex:(NSUInteger)index
-{
-    return [self.list objectAtIndex:index];
-}
-
-- (NSUInteger)indexOf:(Sample*)obj
-{
-    NSUInteger row = 0;
-    for (Sample* sample in self.list) {
-        if (sample == obj) {
-            break;
-        }
-        row++;
-    }
-    if (row == [self.list count]) {
-        return -1;
-    }
-    return row;
-}
-
-- (void)addSample:(Sample*)sample
-{
-    [self.list addObject:sample];
-}
-
-- (id <LKWorker>)nextWorker
-{
-    NSArray* copiedList = [[self.list copy] autorelease];
-    for (Sample* sample in copiedList) {
-        if (sample.workerState == LKWorkerStateWaiting) {
-            sample.workerState = LKWorkerStateExecuting;
-            return sample;
-        }
-        
-    }
-    return nil;
-}
-
-- (NSUInteger)count
-{
-    return [self.list count];
-}
-
-
-@end
-
-//------------------------------------------------------------------------------
 @implementation LKWorkerManagerViewController
 @synthesize tableView = tableView_;
 @synthesize queue;
@@ -223,27 +164,28 @@
     [self.tableView scrollToRowAtIndexPath:indexPath
                           atScrollPosition:UITableViewScrollPositionNone
                                   animated:YES];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.queue count];
 }
 
-- (IBAction)cancel:(id)sender
+- (IBAction)cancelAllWorkers:(id)sender
 {    
     [self.workerManager cancelAll];
     [self.tableView reloadData];
 }
 
-- (IBAction)pause:(id)sender
+- (IBAction)pauseAllWorkers:(id)sender
 {
     [self.workerManager suspendAll];
     [self.tableView reloadData];
 }
 
-- (IBAction)resume:(id)sender
+- (IBAction)resumeAllWorkers:(id)sender
 {
     [self.workerManager resumeAll];
     [self.tableView reloadData];
 }
 
-- (IBAction)stopStart:(id)sender event:(UIEvent*)event
+- (IBAction)suspendResumeWorker:(id)sender event:(UIEvent*)event
 {
     UITouch* touch = [[event allTouches] anyObject];
     CGPoint p = [touch locationInView:self.tableView];
@@ -290,9 +232,12 @@
     cell.progressView.progress = sample.progress;
 }
 
+static NSInteger finishedCounter_ = 0;
 - (void)didFinishWorkerManager:(LKWorkerManager *)workerManager worker:(id<LKWorker>)worker
 {
     [self _updateCellForWorker:worker];
+    finishedCounter_++;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.queue count] - finishedCounter_;
 }
 
 @end

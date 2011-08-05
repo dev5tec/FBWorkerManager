@@ -11,7 +11,9 @@
 @class LKWorkerManagerViewController;
 
 @interface LKWorkerManagerAppDelegate : NSObject <UIApplicationDelegate>
-
+{
+    UIBackgroundTaskIdentifier backgroundTaskIdentifer_;
+}
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @property (nonatomic, retain) IBOutlet LKWorkerManagerViewController *viewController;

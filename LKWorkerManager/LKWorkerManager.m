@@ -78,6 +78,7 @@
                     [self.delegate didFinishWorkerManager:self worker:worker];
                 });
             }
+            NSLog(@"completed");
             break;
             
         case LKWorkerStateCanceled:
@@ -273,6 +274,9 @@
 {
     [self _setWorker:worker workerState:LKWorkerStateWaiting];
     [self _updateWorker:worker];
+    if (self.state == LKWorkerManagerStateSuspending) {
+        self.state = LKWorkerManagerStateRunning;
+    }
 }
 
 - (void)cancelWorker:(id <LKWorker>)worker
@@ -281,6 +285,65 @@
     @synchronized (self.workerSet) {
         [self.workerSet removeObject:worker];
     }
+}
+
+
+#pragma mark -
+#pragma mark API (background)
+static UIBackgroundTaskIdentifier backgroundTaskIdentifer_;
+static BOOL backgroundTaskEnabled_ = NO;
+
++ (void)_willResignActive:(NSNotification*)notification
+{
+    NSLog(@"%s|%d", __PRETTY_FUNCTION__, backgroundTaskIdentifer_);
+    UIApplication* app = [UIApplication sharedApplication];
+    
+    NSAssert(backgroundTaskIdentifer_ == UIBackgroundTaskInvalid, nil);
+    
+    backgroundTaskIdentifer_ = [app beginBackgroundTaskWithExpirationHandler:^{
+        
+        // expire !
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (backgroundTaskIdentifer_ != UIBackgroundTaskInvalid) {
+                [app endBackgroundTask:backgroundTaskIdentifer_];
+                backgroundTaskIdentifer_ = UIBackgroundTaskInvalid;
+            }
+        });
+    }];       
+}
+
++ (void)_didBecomeActive:(NSNotification*)notification
+{
+    NSLog(@"%s|%d", __PRETTY_FUNCTION__, backgroundTaskIdentifer_);
+    UIApplication* app = [UIApplication sharedApplication];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (backgroundTaskIdentifer_ != UIBackgroundTaskInvalid) {
+            [app endBackgroundTask:backgroundTaskIdentifer_];
+            backgroundTaskIdentifer_ = UIBackgroundTaskInvalid;
+        }
+    });
+    /*
+    Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    */
+}
+
++ (void)enableBackgroundTask
+{
+    if (backgroundTaskEnabled_) {
+        return;
+    }
+    backgroundTaskEnabled_ = YES;
+
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(_willResignActive:)
+                               name:UIApplicationWillResignActiveNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(_didBecomeActive:)
+                               name:UIApplicationDidBecomeActiveNotification
+                             object:nil];
 }
 
 @end
