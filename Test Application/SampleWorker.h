@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FBWorker.h"
 
-@interface Sample : NSObject <FBWorker> 
+@interface SampleWorker : NSObject <FBWorker> 
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, retain) NSDate* time;
 @property (nonatomic, assign) CGFloat progress;

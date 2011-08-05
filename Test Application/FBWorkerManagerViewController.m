@@ -16,7 +16,7 @@
 
 @implementation FBWorkerManagerViewController
 @synthesize tableView = tableView_;
-@synthesize queue;
+@synthesize list;
 @synthesize workerManager;
 @synthesize cancelButton;
 
@@ -25,7 +25,7 @@
 #pragma mark Private
 - (void)_updateCellForWorker:(id <FBWorker>)worker
 {
-    NSUInteger row = [self.queue indexOf:worker];
+    NSUInteger row = [self.list indexOfObject:worker];
     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:0];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                           withRowAnimation:UITableViewRowAnimationNone];
@@ -50,10 +50,12 @@
 {
     [super viewDidLoad];
     
-    if (self.queue == nil) {
-        self.queue = [[[SampleQueue alloc] init] autorelease];
-        self.workerManager = [FBWorkerManager workerManagerWithWorkerQueue:self.queue];
+    if (self.list == nil) {
+        self.list = [NSMutableArray array];
+        self.workerManager = [FBWorkerManager workerManager];
         self.workerManager.delegate = self;
+        self.workerManager.workerSource = self;
+        self.workerManager.maxWorkers = 3;
         [self.workerManager start];
     }
 }
@@ -61,7 +63,7 @@
 - (void)viewDidUnload
 {
     self.tableView = nil;
-    self.queue = nil;
+    self.list = nil;
     self.workerManager = nil;
     self.cancelButton = nil;
     [super viewDidUnload];    
@@ -79,7 +81,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.queue count];
+    return [self.list count];
 }
 
 
@@ -91,7 +93,7 @@
         UINib* nib = [UINib nibWithNibName:cellIdentifier bundle:nil];
         cell = [[nib instantiateWithOwner:self options:nil] objectAtIndex:0];
     }
-    Sample* obj = [self.queue objectAtIndex:indexPath.row];
+    SampleWorker* obj = [self.list objectAtIndex:indexPath.row];
     cell.title.text = obj.title;
     cell.progressView.progress = obj.progress;
     
@@ -144,7 +146,7 @@
 
 - (void)dealloc {
     self.tableView = nil;
-    self.queue = nil;
+    self.list = nil;
     self.workerManager = nil;
     self.cancelButton = nil;
     [super dealloc];
@@ -152,11 +154,11 @@
 
 - (IBAction)add:(id)sender {
     static int i=1;
-    Sample* obj = [[[Sample alloc] init] autorelease];
+    SampleWorker* obj = [[[SampleWorker alloc] init] autorelease];
     obj.title = [NSString stringWithFormat:@"WORKER - %02d", i++];
     obj.time = [NSDate date];
-    [self.queue addSample:obj];
-    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[self.queue count]-1
+    [self.list addObject:obj];
+    NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[self.list count]-1
                                                 inSection:0];
     NSArray* paths = [NSArray arrayWithObject:indexPath];
     [self.tableView insertRowsAtIndexPaths:paths
@@ -164,7 +166,7 @@
     [self.tableView scrollToRowAtIndexPath:indexPath
                           atScrollPosition:UITableViewScrollPositionNone
                                   animated:YES];
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.queue count];
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.list count];
 }
 
 - (IBAction)cancelAllWorkers:(id)sender
@@ -190,7 +192,7 @@
     UITouch* touch = [[event allTouches] anyObject];
     CGPoint p = [touch locationInView:self.tableView];
     NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-    Sample* sample = [self.queue objectAtIndex:indexPath.row];
+    SampleWorker* sample = [self.list objectAtIndex:indexPath.row];
     if (sample.workerState == FBWorkerStateExecuting) {
         [self.workerManager suspendWorker:sample];
     } else if (sample.workerState == FBWorkerStateSuspending) {
@@ -204,7 +206,7 @@
     UITouch* touch = [[event allTouches] anyObject];
     CGPoint p = [touch locationInView:self.tableView];
     NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
-    Sample* sample = [self.queue objectAtIndex:indexPath.row];
+    SampleWorker* sample = [self.list objectAtIndex:indexPath.row];
     [self.workerManager cancelWorker:sample];
 }
 
@@ -214,7 +216,7 @@
 /*
 - (BOOL)canWorkerManagerRun
 {
-    return [self.queue count];
+    return [self.list count];
 }
  */
 
@@ -225,8 +227,8 @@
 
 - (void)didUpdateWorkerManager:(FBWorkerManager *)workerManager worker:(id<FBWorker>)worker
 {
-    Sample* sample = (Sample*)worker;
-    NSUInteger row = [self.queue indexOf:sample];
+    SampleWorker* sample = (SampleWorker*)worker;
+    NSUInteger row = [self.list indexOfObject:sample];
     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:0];
     MyCell* cell = (MyCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.progressView.progress = sample.progress;
@@ -237,7 +239,23 @@ static NSInteger finishedCounter_ = 0;
 {
     [self _updateCellForWorker:worker];
     finishedCounter_++;
-    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.queue count] - finishedCounter_;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = [self.list count] - finishedCounter_;
+}
+
+
+#pragma mark -
+#pragma mark FBWorkerManagerSource
+- (id <FBWorker>)nextWorker
+{
+    NSArray* copiedList = [[self.list copy] autorelease];
+    for (SampleWorker* sample in copiedList) {
+        if (sample.workerState == FBWorkerStateWaiting) {
+            sample.workerState = FBWorkerStateExecuting;
+            return sample;
+        }
+        
+    }
+    return nil;
 }
 
 @end

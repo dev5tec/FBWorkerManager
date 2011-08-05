@@ -1,20 +1,39 @@
 //
-//  FBWorkerManager.h
-//  FBWorkerManager
+// Copyright (c) 2011 Five-technology Co.,Ltd.
 //
-//  Created by Hashiguchi Hiroshi on 11/08/01.
-//  Copyright 2011年 __MyCompanyName__. All rights reserved.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 //
 
 #import <Foundation/Foundation.h>
-#import "FBWorkerQueue.h"
 #import "FBWorker.h"
 
 // TODO: TIMEOUT?
 
+#pragma mark -
+@protocol FBWorkerManagerSource <NSObject>
 
-//------------------------------------------------------------------------------
+- (id <FBWorker>)nextWorker;
 
+@end
+
+
+#pragma mark -
 @protocol FBWorkerManagerDelegate <NSObject>
 @optional
 // called in main thread
@@ -26,8 +45,7 @@
 @end
 
 
-//------------------------------------------------------------------------------
-
+#pragma mark -
 typedef enum {
     FBWorkerManagerStateStopping = 0,
     FBWorkerManagerStateRunning,
@@ -40,16 +58,16 @@ typedef enum {
 // API (properties)
 @property (nonatomic, assign) NSTimeInterval interval;
 @property (nonatomic, assign) id <FBWorkerManagerDelegate> delegate;
+@property (nonatomic, assign) id <FBWorkerManagerSource> workerSource;
 @property (nonatomic, assign) NSUInteger maxWorkers;
 
 
 // API (properties, readonly)
 @property (assign, readonly) FBWorkerManagerState state;
-@property (nonatomic, retain, readonly) id <FBWorkerQueue> workerQueue;
 
 
 // API (general)
-+ (FBWorkerManager*)workerManagerWithWorkerQueue:(id <FBWorkerQueue>)workerQueue;
++ (FBWorkerManager*)workerManager;
 - (void)start;
 - (void)stop;
 + (void)enableBackgroundTask;

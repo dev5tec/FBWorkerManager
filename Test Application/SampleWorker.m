@@ -6,10 +6,10 @@
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
 //
 
-#import "Sample.h"
+#import "SampleWorker.h"
 #import "FBWorkerManager.h"
 
-@implementation Sample
+@implementation SampleWorker
 @synthesize title, workerState, time, progress;
 - (BOOL)executeWithWorkerManager:(FBWorkerManager *)workerManager
 {

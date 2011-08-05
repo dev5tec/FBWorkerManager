@@ -8,16 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "FBWorkerManager.h"
-#import "Sample.h"
-#import "SampleQueue.h"
+#import "SampleWorker.h"
 
-@interface FBWorkerManagerViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FBWorkerManagerDelegate> {
+@interface FBWorkerManagerViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FBWorkerManagerDelegate, FBWorkerManagerSource> {
     UIBarButtonItem *control;
 }
 
 
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
-@property (nonatomic, retain) SampleQueue* queue;
+@property (nonatomic, retain) NSMutableArray* list;
 @property (nonatomic, retain) FBWorkerManager* workerManager;
 @property (nonatomic, retain) IBOutlet UIBarButtonItem *cancelButton;
 

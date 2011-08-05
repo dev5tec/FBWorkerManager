@@ -1,9 +1,23 @@
 //
-//  FBWorkerManager.m
-//  FBWorkerManager
+// Copyright (c) 2011 Five-technology Co.,Ltd.
 //
-//  Created by Hashiguchi Hiroshi on 11/08/01.
-//  Copyright 2011年 __MyCompanyName__. All rights reserved.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 //
 
 #import "FBWorkerManager.h"
@@ -13,7 +27,6 @@
 
 #pragma mark -
 @interface FBWorkerManager()
-@property (nonatomic, retain) id <FBWorkerQueue> workerQueue;
 @property (assign) FBWorkerManagerState state;
 @property (nonatomic, retain) NSTimer* timer;
 @property (nonatomic, retain) NSMutableSet* workerSet;
@@ -26,7 +39,7 @@
 @synthesize maxWorkers = maxWorkers_;
 @synthesize interval = interval_;
 @synthesize state = state_;
-@synthesize workerQueue = workerQueue_;
+@synthesize workerSource = workerSource_;
 @synthesize timer = timer_;
 @synthesize workerSet = workerSet_;
 
@@ -107,7 +120,7 @@
 {
     id <FBWorker> worker;
 
-    while ((worker = [self.workerQueue nextWorker])) {
+    while ((worker = [self.workerSource nextWorker])) {
         @synchronized (self.workerSet) {
             [self.workerSet addObject:worker];
         }
@@ -139,10 +152,6 @@
         return;
     }
 
-    if ([self.workerQueue count] == 0) {
-        return;
-    }
-
     if ([self.delegate respondsToSelector:@selector(canWorkerManagerRun)]) {
         if (![self.delegate canWorkerManagerRun]) {
             return;
@@ -158,14 +167,13 @@
 #pragma mark -
 #pragma mark Basics
 
-- (id)initWithWorkerQueue:(id <FBWorkerQueue>)workerQueue
+- (id)init
 {
     self = [super init];
     if (self) {
         self.interval = FBWORKERMANAGER_TIMEINTERVAL_FOR_CHECK;
         self.state = FBWorkerManagerStateStopping;
         self.maxWorkers = FBWORKERMANAGER_MAX_WORKERS;
-        self.workerQueue = workerQueue;
         self.workerSet = [NSMutableSet set];
     }
     
@@ -177,16 +185,16 @@
         [self.timer invalidate];
     }
     self.timer = nil;
-    self.workerQueue = nil;
+    self.workerSource = nil;
     [super dealloc];
 }
 
 #pragma mark -
 #pragma mark API (General)
 
-+ (FBWorkerManager*)workerManagerWithWorkerQueue:(id <FBWorkerQueue>)workerQueue
++ (FBWorkerManager*)workerManager
 {
-    return [[[self alloc] initWithWorkerQueue:workerQueue] autorelease];
+    return [[[self alloc] init] autorelease];
 }
 
 - (void)start
@@ -306,7 +314,7 @@ static BOOL backgroundTaskEnabled_ = NO;
         }
         [self.workerSet removeAllObjects];
         
-        while ((worker = [self.workerQueue nextWorker])) {
+        while ((worker = [self.workerSource nextWorker])) {
             [self _setWorker:worker workerState:FBWorkerStateCanceled];
         }
     }

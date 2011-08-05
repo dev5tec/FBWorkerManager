@@ -10,7 +10,7 @@
 		4C04D9D013E92C88001A300A /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9CE13E92C88001A300A /* pause.png */; };
 		4C04D9D313E93068001A300A /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9D213E93068001A300A /* play.png */; };
 		4C04D9D513E93213001A300A /* cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C04D9D413E93213001A300A /* cancel.png */; };
-		4C04D9D813E93D4D001A300A /* Sample.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04D9D713E93D4D001A300A /* Sample.m */; };
+		4C04D9D813E93D4D001A300A /* SampleWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C04D9D713E93D4D001A300A /* SampleWorker.m */; };
 		4C0E5A7F13E7E3A500D56EDE /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7E13E7E3A500D56EDE /* MyCell.m */; };
 		4C0E5A8013E7E3A500D56EDE /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7E13E7E3A500D56EDE /* MyCell.m */; };
 		4C0E5A8213E7E3B500D56EDE /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E5A8113E7E3B500D56EDE /* MyCell.xib */; };
@@ -33,7 +33,6 @@
 		4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */; };
 		4C4B825613E6449A008A7088 /* FBWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* FBWorkerManager.m */; };
 		4C4B825713E6449A008A7088 /* FBWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* FBWorkerManager.m */; };
-		4C92B59013EAD95F0002012E /* SampleQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C92B58F13EAD95F0002012E /* SampleQueue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,8 +49,8 @@
 		4C04D9CE13E92C88001A300A /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		4C04D9D213E93068001A300A /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		4C04D9D413E93213001A300A /* cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel.png; sourceTree = "<group>"; };
-		4C04D9D613E93D4C001A300A /* Sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sample.h; sourceTree = "<group>"; };
-		4C04D9D713E93D4D001A300A /* Sample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sample.m; sourceTree = "<group>"; };
+		4C04D9D613E93D4C001A300A /* SampleWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleWorker.h; sourceTree = "<group>"; };
+		4C04D9D713E93D4D001A300A /* SampleWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleWorker.m; sourceTree = "<group>"; };
 		4C0E5A7D13E7E3A500D56EDE /* MyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCell.h; sourceTree = "<group>"; };
 		4C0E5A7E13E7E3A500D56EDE /* MyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCell.m; sourceTree = "<group>"; };
 		4C0E5A8113E7E3B500D56EDE /* MyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyCell.xib; sourceTree = "<group>"; };
@@ -75,12 +74,9 @@
 		4C4B824513E64421008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerTests.h; sourceTree = "<group>"; };
 		4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerTests.m; sourceTree = "<group>"; };
-		4C4B825413E6449A008A7088 /* FBWorkerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorkerManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		4C4B825513E6449A008A7088 /* FBWorkerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FBWorkerManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		4C4B825813E644AB008A7088 /* FBWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorker.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		4C4B825C13E644C4008A7088 /* FBWorkerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBWorkerQueue.h; sourceTree = "<group>"; };
-		4C92B58E13EAD95F0002012E /* SampleQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleQueue.h; sourceTree = "<group>"; };
-		4C92B58F13EAD95F0002012E /* SampleQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleQueue.m; sourceTree = "<group>"; };
+		4C4B825413E6449A008A7088 /* FBWorkerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorkerManager.h; sourceTree = "<group>"; };
+		4C4B825513E6449A008A7088 /* FBWorkerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FBWorkerManager.m; sourceTree = "<group>"; };
+		4C4B825813E644AB008A7088 /* FBWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorker.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,10 +144,8 @@
 				4C4B822E13E64420008A7088 /* FBWorkerManagerViewController.h */,
 				4C4B822F13E64420008A7088 /* FBWorkerManagerViewController.m */,
 				4C4B823113E64420008A7088 /* FBWorkerManagerViewController.xib */,
-				4C04D9D613E93D4C001A300A /* Sample.h */,
-				4C04D9D713E93D4D001A300A /* Sample.m */,
-				4C92B58E13EAD95F0002012E /* SampleQueue.h */,
-				4C92B58F13EAD95F0002012E /* SampleQueue.m */,
+				4C04D9D613E93D4C001A300A /* SampleWorker.h */,
+				4C04D9D713E93D4D001A300A /* SampleWorker.m */,
 				4C4B822013E64420008A7088 /* Supporting Files */,
 				4C0E5A7D13E7E3A500D56EDE /* MyCell.h */,
 				4C0E5A7E13E7E3A500D56EDE /* MyCell.m */,
@@ -200,7 +194,6 @@
 				4C4B825413E6449A008A7088 /* FBWorkerManager.h */,
 				4C4B825513E6449A008A7088 /* FBWorkerManager.m */,
 				4C4B825813E644AB008A7088 /* FBWorker.h */,
-				4C4B825C13E644C4008A7088 /* FBWorkerQueue.h */,
 			);
 			path = FBWorkerManager;
 			sourceTree = "<group>";
@@ -323,8 +316,7 @@
 				4C4B823013E64420008A7088 /* FBWorkerManagerViewController.m in Sources */,
 				4C4B825613E6449A008A7088 /* FBWorkerManager.m in Sources */,
 				4C0E5A7F13E7E3A500D56EDE /* MyCell.m in Sources */,
-				4C04D9D813E93D4D001A300A /* Sample.m in Sources */,
-				4C92B59013EAD95F0002012E /* SampleQueue.m in Sources */,
+				4C04D9D813E93D4D001A300A /* SampleWorker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
