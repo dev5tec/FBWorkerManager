@@ -15,6 +15,7 @@
 		4C0E5A8013E7E3A500D56EDE /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0E5A7E13E7E3A500D56EDE /* MyCell.m */; };
 		4C0E5A8213E7E3B500D56EDE /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E5A8113E7E3B500D56EDE /* MyCell.xib */; };
 		4C0E5A8313E7E3B500D56EDE /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E5A8113E7E3B500D56EDE /* MyCell.xib */; };
+		4C43EFC113EBAD200057A7F4 /* FBWorkerManagerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B823113E64420008A7088 /* FBWorkerManagerViewController.xib */; };
 		4C4B821A13E64420008A7088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821913E64420008A7088 /* UIKit.framework */; };
 		4C4B821C13E64420008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
 		4C4B821E13E64420008A7088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821D13E64420008A7088 /* CoreGraphics.framework */; };
@@ -23,7 +24,6 @@
 		4C4B822A13E64420008A7088 /* FBWorkerManagerAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B822913E64420008A7088 /* FBWorkerManagerAppDelegate.m */; };
 		4C4B822D13E64420008A7088 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B822B13E64420008A7088 /* MainWindow.xib */; };
 		4C4B823013E64420008A7088 /* FBWorkerManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B822F13E64420008A7088 /* FBWorkerManagerViewController.m */; };
-		4C4B823313E64420008A7088 /* FBWorkerManagerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B823113E64420008A7088 /* FBWorkerManagerViewController.xib */; };
 		4C4B823B13E64421008A7088 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B823A13E64421008A7088 /* SenTestingKit.framework */; };
 		4C4B823C13E64421008A7088 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821913E64420008A7088 /* UIKit.framework */; };
 		4C4B823D13E64421008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
@@ -277,11 +277,11 @@
 			files = (
 				4C4B822413E64420008A7088 /* InfoPlist.strings in Resources */,
 				4C4B822D13E64420008A7088 /* MainWindow.xib in Resources */,
-				4C4B823313E64420008A7088 /* FBWorkerManagerViewController.xib in Resources */,
 				4C0E5A8213E7E3B500D56EDE /* MyCell.xib in Resources */,
 				4C04D9D013E92C88001A300A /* pause.png in Resources */,
 				4C04D9D313E93068001A300A /* play.png in Resources */,
 				4C04D9D513E93213001A300A /* cancel.png in Resources */,
+				4C43EFC113EBAD200057A7F4 /* FBWorkerManagerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,14 +452,14 @@
 		4C4B825113E64421008A7088 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LKWorkerManager.app/LKWorkerManager";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FBWorkerManager.app/FBWorkerManager";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Test Application/LKWorkerManager-Prefix.pch";
-				INFOPLIST_FILE = "LKWorkerManagerTests/FBWorkerManagerTests-Info.plist";
+				GCC_PREFIX_HEADER = "Test Application/FBWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "FBWorkerManagerTests/FBWorkerManagerTests-Info.plist";
 				PRODUCT_NAME = FBWorkerManagerTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -469,14 +469,14 @@
 		4C4B825213E64421008A7088 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/LKWorkerManager.app/LKWorkerManager";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/FBWorkerManager.app/FBWorkerManager";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Test Application/LKWorkerManager-Prefix.pch";
-				INFOPLIST_FILE = "LKWorkerManagerTests/FBWorkerManagerTests-Info.plist";
+				GCC_PREFIX_HEADER = "Test Application/FBWorkerManager-Prefix.pch";
+				INFOPLIST_FILE = "FBWorkerManagerTests/FBWorkerManagerTests-Info.plist";
 				PRODUCT_NAME = FBWorkerManagerTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;

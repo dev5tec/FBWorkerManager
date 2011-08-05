@@ -210,7 +210,7 @@
 
 
 #pragma mark -
-#pragma mark LKWokerManagerDelegate
+#pragma mark FBWokerManagerDelegate
 /*
 - (BOOL)canWorkerManagerRun
 {
