@@ -1,28 +1,27 @@
 //
-//  LKWorkerManager.m
-//  LKWorkerManager
+//  FBWorkerManager.m
+//  FBWorkerManager
 //
 //  Created by Hashiguchi Hiroshi on 11/08/01.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
 //
 
-#import "LKWorkerManager.h"
-#import "LKWorker.h"
+#import "FBWorkerManager.h"
 
-#define LKWORKERMANAGER_TIMEINTERVAL_FOR_CHECK  1.0
-#define LKWORKERMANAGER_MAX_WORKERS             1
+#define FBWORKERMANAGER_TIMEINTERVAL_FOR_CHECK  1.0
+#define FBWORKERMANAGER_MAX_WORKERS             1
 
 #pragma mark -
-@interface LKWorkerManager()
-@property (nonatomic, retain) id <LKWorkerQueue> workerQueue;
-@property (assign) LKWorkerManagerState state;
+@interface FBWorkerManager()
+@property (nonatomic, retain) id <FBWorkerQueue> workerQueue;
+@property (assign) FBWorkerManagerState state;
 @property (nonatomic, retain) NSTimer* timer;
 @property (nonatomic, retain) NSMutableSet* workerSet;
 @end
 
 
 #pragma mark -
-@implementation LKWorkerManager
+@implementation FBWorkerManager
 @synthesize delegate = delegate_;
 @synthesize maxWorkers = maxWorkers_;
 @synthesize interval = interval_;
@@ -42,8 +41,8 @@
     
     NSUInteger count = 0;
     @synchronized (self.workerSet) {
-        for (id <LKWorker> worker in self.workerSet) {
-            if ([worker workerState] == LKWorkerStateExecuting) {
+        for (id <FBWorker> worker in self.workerSet) {
+            if ([worker workerState] == FBWorkerStateExecuting) {
                 count++;
             }
         }
@@ -51,28 +50,28 @@
     return (count < self.maxWorkers);
 }
 
-- (void)_setWorker:(id <LKWorker>)worker workerState:(LKWorkerState)workerSstate
+- (void)_setWorker:(id <FBWorker>)worker workerState:(FBWorkerState)workerSstate
 {
     [worker setWorkerState:workerSstate];
     
     switch (workerSstate) {
-        case LKWorkerStateWaiting:
+        case FBWorkerStateWaiting:
             // TODO: resume ?
             if ([worker respondsToSelector:@selector(didResumeWithWorkerManager:)]) {
                 [worker didResumeWithWorkerManager:self];
             }
             break;
             
-        case LKWorkerStateExecuting:
+        case FBWorkerStateExecuting:
             break;
             
-        case LKWorkerStateSuspending:
+        case FBWorkerStateSuspending:
             if ([worker respondsToSelector:@selector(didSuspendWithWorkerManager:)]) {
                 [worker didSuspendWithWorkerManager:self];
             }
             break;
             
-        case LKWorkerStateCompleted:
+        case FBWorkerStateCompleted:
             if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.delegate didFinishWorkerManager:self worker:worker];
@@ -81,7 +80,7 @@
             NSLog(@"completed");
             break;
             
-        case LKWorkerStateCanceled:
+        case FBWorkerStateCanceled:
             if ([worker respondsToSelector:@selector(didCancelWithWorkerManager:)]) {
                 [worker didCancelWithWorkerManager:self];
             }
@@ -95,7 +94,7 @@
     }
 }
 
-- (void)_updateWorker:(id <LKWorker>)worker
+- (void)_updateWorker:(id <FBWorker>)worker
 {
     if ([self.delegate respondsToSelector:@selector(didUpdateWorkerManager:worker:)]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -106,7 +105,7 @@
 
 - (void)_startThread
 {
-    id <LKWorker> worker;
+    id <FBWorker> worker;
 
     while ((worker = [self.workerQueue nextWorker])) {
         @synchronized (self.workerSet) {
@@ -121,7 +120,7 @@
             }
             
             if ([worker executeWithWorkerManager:self]) { 
-                [self _setWorker:worker workerState:LKWorkerStateCompleted];                
+                [self _setWorker:worker workerState:FBWorkerStateCompleted];                
                 @synchronized (self.workerSet) {
                     [self.workerSet removeObject:worker];
                 }
@@ -136,7 +135,7 @@
 
 - (void)_check:(NSTimer*)timer
 {
-    if (self.state != LKWorkerManagerStateRunning) {
+    if (self.state != FBWorkerManagerStateRunning) {
         return;
     }
 
@@ -159,13 +158,13 @@
 #pragma mark -
 #pragma mark Basics
 
-- (id)initWithWorkerQueue:(id <LKWorkerQueue>)workerQueue
+- (id)initWithWorkerQueue:(id <FBWorkerQueue>)workerQueue
 {
     self = [super init];
     if (self) {
-        self.interval = LKWORKERMANAGER_TIMEINTERVAL_FOR_CHECK;
-        self.state = LKWorkerManagerStateStopping;
-        self.maxWorkers = LKWORKERMANAGER_MAX_WORKERS;
+        self.interval = FBWORKERMANAGER_TIMEINTERVAL_FOR_CHECK;
+        self.state = FBWorkerManagerStateStopping;
+        self.maxWorkers = FBWORKERMANAGER_MAX_WORKERS;
         self.workerQueue = workerQueue;
         self.workerSet = [NSMutableSet set];
     }
@@ -185,18 +184,18 @@
 #pragma mark -
 #pragma mark API (General)
 
-+ (LKWorkerManager*)workerManagerWithWorkerQueue:(id <LKWorkerQueue>)workerQueue
++ (FBWorkerManager*)workerManagerWithWorkerQueue:(id <FBWorkerQueue>)workerQueue
 {
     return [[[self alloc] initWithWorkerQueue:workerQueue] autorelease];
 }
 
 - (void)start
 {
-    if (self.state != LKWorkerManagerStateStopping) {
+    if (self.state != FBWorkerManagerStateStopping) {
         return;
     }
 
-    self.state = LKWorkerManagerStateRunning;
+    self.state = FBWorkerManagerStateRunning;
     [self _check:nil];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:self.interval
                                                   target:self
@@ -207,7 +206,7 @@
 
 - (void)stop
 {
-    self.state = LKWorkerManagerStateStopping;
+    self.state = FBWorkerManagerStateStopping;
     if ([self.timer isValid]) {
         [self.timer invalidate];
     }
@@ -215,81 +214,7 @@
     self.timer = nil;   
 }
 
-- (void)suspendAll
-{
-    self.state = LKWorkerManagerStateSuspending;
 
-    @synchronized (self.workerSet) {
-        for (id <LKWorker> worker in self.workerSet) {
-            [self _setWorker:worker workerState:LKWorkerStateSuspending];
-        }
-    }
-}
-
-- (void)resumeAll
-{
-    @synchronized (self.workerSet) {
-        for (id <LKWorker> worker in self.workerSet) {
-            [self _setWorker:worker workerState:LKWorkerStateWaiting];
-        }
-    }    
-    self.state = LKWorkerManagerStateRunning;
-}
-
-- (void)cancelAll
-{
-    @synchronized (self.workerSet) {
-        id <LKWorker> worker;
-        for (worker in self.workerSet) {
-            [self _setWorker:worker workerState:LKWorkerStateCanceled];
-        }
-        [self.workerSet removeAllObjects];
-        
-        while ((worker = [self.workerQueue nextWorker])) {
-            [self _setWorker:worker workerState:LKWorkerStateCanceled];
-        }
-    }
-}
-
-
-#pragma mark -
-#pragma mark API (for worker)
-
-- (void)notifyUpdatedWorker:(id <LKWorker>)worker
-{
-    [self _updateWorker:worker];
-}
-
-
-#pragma mark -
-#pragma mark API (for controller)
-
-- (void)suspendWorker:(id <LKWorker>)worker
-{
-    [self _setWorker:worker workerState:LKWorkerStateSuspending];
-    [self _updateWorker:worker];
-}
-
-- (void)resumeWorker:(id <LKWorker>)worker
-{
-    [self _setWorker:worker workerState:LKWorkerStateWaiting];
-    [self _updateWorker:worker];
-    if (self.state == LKWorkerManagerStateSuspending) {
-        self.state = LKWorkerManagerStateRunning;
-    }
-}
-
-- (void)cancelWorker:(id <LKWorker>)worker
-{
-    [self _setWorker:worker workerState:LKWorkerStateCanceled];
-    @synchronized (self.workerSet) {
-        [self.workerSet removeObject:worker];
-    }
-}
-
-
-#pragma mark -
-#pragma mark API (background)
 static UIBackgroundTaskIdentifier backgroundTaskIdentifer_;
 static BOOL backgroundTaskEnabled_ = NO;
 
@@ -324,8 +249,8 @@ static BOOL backgroundTaskEnabled_ = NO;
         }
     });
     /*
-    Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    */
+     Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     */
 }
 
 + (void)enableBackgroundTask
@@ -334,7 +259,7 @@ static BOOL backgroundTaskEnabled_ = NO;
         return;
     }
     backgroundTaskEnabled_ = YES;
-
+    
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self
                            selector:@selector(_willResignActive:)
@@ -345,5 +270,81 @@ static BOOL backgroundTaskEnabled_ = NO;
                                name:UIApplicationDidBecomeActiveNotification
                              object:nil];
 }
+
+
+#pragma mark -
+#pragma mark API (manage workers)
+
+
+- (void)suspendAll
+{
+    self.state = FBWorkerManagerStateSuspending;
+
+    @synchronized (self.workerSet) {
+        for (id <FBWorker> worker in self.workerSet) {
+            [self _setWorker:worker workerState:FBWorkerStateSuspending];
+        }
+    }
+}
+
+- (void)resumeAll
+{
+    @synchronized (self.workerSet) {
+        for (id <FBWorker> worker in self.workerSet) {
+            [self _setWorker:worker workerState:FBWorkerStateWaiting];
+        }
+    }    
+    self.state = FBWorkerManagerStateRunning;
+}
+
+- (void)cancelAll
+{
+    @synchronized (self.workerSet) {
+        id <FBWorker> worker;
+        for (worker in self.workerSet) {
+            [self _setWorker:worker workerState:FBWorkerStateCanceled];
+        }
+        [self.workerSet removeAllObjects];
+        
+        while ((worker = [self.workerQueue nextWorker])) {
+            [self _setWorker:worker workerState:FBWorkerStateCanceled];
+        }
+    }
+}
+
+
+- (void)notifyUpdatedWorker:(id <FBWorker>)worker
+{
+    [self _updateWorker:worker];
+}
+
+
+#pragma mark -
+#pragma mark API (for controller)
+
+- (void)suspendWorker:(id <FBWorker>)worker
+{
+    [self _setWorker:worker workerState:FBWorkerStateSuspending];
+    [self _updateWorker:worker];
+}
+
+- (void)resumeWorker:(id <FBWorker>)worker
+{
+    [self _setWorker:worker workerState:FBWorkerStateWaiting];
+    [self _updateWorker:worker];
+    if (self.state == FBWorkerManagerStateSuspending) {
+        self.state = FBWorkerManagerStateRunning;
+    }
+}
+
+- (void)cancelWorker:(id <FBWorker>)worker
+{
+    [self _setWorker:worker workerState:FBWorkerStateCanceled];
+    @synchronized (self.workerSet) {
+        [self.workerSet removeObject:worker];
+    }
+}
+
+
 
 @end

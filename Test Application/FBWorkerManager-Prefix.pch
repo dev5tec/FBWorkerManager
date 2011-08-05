@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'LKWorkerManager' target in the 'LKWorkerManager' project
+// Prefix header for all source files of the 'FBWorkerManager' target in the 'FBWorkerManager' project
 //
 
 #import <Availability.h>

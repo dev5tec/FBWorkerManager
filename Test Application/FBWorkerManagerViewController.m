@@ -1,6 +1,6 @@
 //
-//  LKWorkerManagerViewController.m
-//  LKWorkerManager
+//  FBWorkerManagerViewController.m
+//  FBWorkerManager
 //
 //
 // icon
@@ -9,12 +9,12 @@
 // http://www.iconfinder.com/icondetails/40865/128/blue_delete_sub_icon
 //
 
-#import "LKWorkerManagerViewController.h"
-#import "LKWorker.h"
+#import "FBWorkerManagerViewController.h"
+#import "FBWorker.h"
 #import "MyCell.h"
 
 
-@implementation LKWorkerManagerViewController
+@implementation FBWorkerManagerViewController
 @synthesize tableView = tableView_;
 @synthesize queue;
 @synthesize workerManager;
@@ -23,7 +23,7 @@
 
 #pragma mark -
 #pragma mark Private
-- (void)_updateCellForWorker:(id <LKWorker>)worker
+- (void)_updateCellForWorker:(id <FBWorker>)worker
 {
     NSUInteger row = [self.queue indexOf:worker];
     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:0];
@@ -52,7 +52,7 @@
     
     if (self.queue == nil) {
         self.queue = [[[SampleQueue alloc] init] autorelease];
-        self.workerManager = [LKWorkerManager workerManagerWithWorkerQueue:self.queue];
+        self.workerManager = [FBWorkerManager workerManagerWithWorkerQueue:self.queue];
         self.workerManager.delegate = self;
         [self.workerManager start];
     }
@@ -96,7 +96,7 @@
     cell.progressView.progress = obj.progress;
     
     switch (obj.workerState) {
-        case LKWorkerStateWaiting:
+        case FBWorkerStateWaiting:
             [cell.indicator stopAnimating];        
             cell.progressView.hidden = NO;
             cell.stopStartButton.hidden = YES;        
@@ -104,7 +104,7 @@
             cell.label.text = @"Waiting";
             break;
             
-        case LKWorkerStateExecuting:
+        case FBWorkerStateExecuting:
             [cell.indicator startAnimating];
             cell.progressView.hidden = NO;
             cell.stopStartButton.hidden = NO;        
@@ -113,7 +113,7 @@
             cell.label.text = @"Executing";
             break;
 
-        case LKWorkerStateSuspending:
+        case FBWorkerStateSuspending:
             [cell.indicator stopAnimating];
             cell.progressView.hidden = NO;
             cell.stopStartButton.hidden = NO;
@@ -122,7 +122,7 @@
             cell.label.text = @"Suspended";
             break;
 
-        case LKWorkerStateCompleted:
+        case FBWorkerStateCompleted:
             [cell.indicator stopAnimating];        
             cell.progressView.hidden = NO;
             cell.stopStartButton.hidden = YES;
@@ -130,7 +130,7 @@
             cell.label.text = @"Completed";
             break;
 
-        case LKWorkerStateCanceled:
+        case FBWorkerStateCanceled:
             [cell.indicator stopAnimating];        
             cell.progressView.hidden = YES;
             cell.stopStartButton.hidden = YES;
@@ -191,9 +191,9 @@
     CGPoint p = [touch locationInView:self.tableView];
     NSIndexPath* indexPath = [self.tableView indexPathForRowAtPoint:p];
     Sample* sample = [self.queue objectAtIndex:indexPath.row];
-    if (sample.workerState == LKWorkerStateExecuting) {
+    if (sample.workerState == FBWorkerStateExecuting) {
         [self.workerManager suspendWorker:sample];
-    } else if (sample.workerState == LKWorkerStateSuspending) {
+    } else if (sample.workerState == FBWorkerStateSuspending) {
         [self.workerManager resumeWorker:sample];
     }
     [self _updateCellForWorker:sample];
@@ -218,12 +218,12 @@
 }
  */
 
-- (void)willBeginWorkerManager:(LKWorkerManager *)workerManager worker:(id<LKWorker>)worker
+- (void)willBeginWorkerManager:(FBWorkerManager *)workerManager worker:(id<FBWorker>)worker
 {
     [self _updateCellForWorker:worker];
 }
 
-- (void)didUpdateWorkerManager:(LKWorkerManager *)workerManager worker:(id<LKWorker>)worker
+- (void)didUpdateWorkerManager:(FBWorkerManager *)workerManager worker:(id<FBWorker>)worker
 {
     Sample* sample = (Sample*)worker;
     NSUInteger row = [self.queue indexOf:sample];
@@ -233,7 +233,7 @@
 }
 
 static NSInteger finishedCounter_ = 0;
-- (void)didFinishWorkerManager:(LKWorkerManager *)workerManager worker:(id<LKWorker>)worker
+- (void)didFinishWorkerManager:(FBWorkerManager *)workerManager worker:(id<FBWorker>)worker
 {
     [self _updateCellForWorker:worker];
     finishedCounter_++;

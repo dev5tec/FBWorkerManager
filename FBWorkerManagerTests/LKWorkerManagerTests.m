@@ -1,14 +1,14 @@
 //
-//  LKWorkerManagerTests.m
-//  LKWorkerManagerTests
+//  FBWorkerManagerTests.m
+//  FBWorkerManagerTests
 //
 //  Created by Hashiguchi Hiroshi on 11/08/01.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
 //
 
-#import "LKWorkerManagerTests.h"
+#import "FBWorkerManagerTests.h"
 
-@implementation LKWorkerManagerTests
+@implementation FBWorkerManagerTests
 
 - (void)setUp
 {
@@ -26,7 +26,7 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in LKWorkerManagerTests");
+    STFail(@"Unit tests are not implemented yet in FBWorkerManagerTests");
 }
 
 @end

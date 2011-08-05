@@ -1,17 +1,17 @@
 //
-//  LKWorkerManagerAppDelegate.m
-//  LKWorkerManager
+//  FBWorkerManagerAppDelegate.m
+//  FBWorkerManager
 //
 //  Created by Hashiguchi Hiroshi on 11/08/01.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
 //
 
-#import "LKWorkerManagerAppDelegate.h"
-#import "LKWorkerManagerViewController.h"
+#import "FBWorkerManagerAppDelegate.h"
+#import "FBWorkerManagerViewController.h"
 
-#import "LKWorkerManager.h"
+#import "FBWorkerManager.h"
 
-@implementation LKWorkerManagerAppDelegate
+@implementation FBWorkerManagerAppDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
@@ -23,7 +23,7 @@
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     
-    [LKWorkerManager enableBackgroundTask];
+    [FBWorkerManager enableBackgroundTask];
     return YES;
 }
 

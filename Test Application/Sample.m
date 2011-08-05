@@ -1,20 +1,20 @@
 //
 //  Sample.m
-//  LKWorkerManager
+//  FBWorkerManager
 //
 //  Created by Hashiguchi Hiroshi on 11/08/03.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
 //
 
 #import "Sample.h"
-#import "LKWorkerManager.h"
+#import "FBWorkerManager.h"
 
 @implementation Sample
 @synthesize title, workerState, time, progress;
-- (BOOL)executeWithWorkerManager:(LKWorkerManager *)workerManager
+- (BOOL)executeWithWorkerManager:(FBWorkerManager *)workerManager
 {
     while (self.progress < 1.0) {
-        if (self.workerState != LKWorkerStateExecuting) {
+        if (self.workerState != FBWorkerStateExecuting) {
             return NO;
         }
         [NSThread sleepForTimeInterval:0.2];

@@ -1,6 +1,6 @@
 //
 //  SampleQueue.m
-//  LKWorkerManager
+//  FBWorkerManager
 //
 //  Created by Hashiguchi Hiroshi on 11/08/04.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
@@ -44,12 +44,12 @@
     [self.list addObject:sample];
 }
 
-- (id <LKWorker>)nextWorker
+- (id <FBWorker>)nextWorker
 {
     NSArray* copiedList = [[self.list copy] autorelease];
     for (Sample* sample in copiedList) {
-        if (sample.workerState == LKWorkerStateWaiting) {
-            sample.workerState = LKWorkerStateExecuting;
+        if (sample.workerState == FBWorkerStateWaiting) {
+            sample.workerState = FBWorkerStateExecuting;
             return sample;
         }
         

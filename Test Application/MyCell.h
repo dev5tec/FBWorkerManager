@@ -1,6 +1,6 @@
 //
 //  MyCell.h
-//  LKWorkerManager
+//  FBWorkerManager
 //
 //  Created by Hashiguchi Hiroshi on 11/08/02.
 //  Copyright 2011年 __MyCompanyName__. All rights reserved.
