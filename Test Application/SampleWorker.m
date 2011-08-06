@@ -10,18 +10,30 @@
 #import "FBWorkerManager.h"
 
 @implementation SampleWorker
-@synthesize title, workerState, time, progress;
+@synthesize title, workerState, time, progress, stopped;
 - (BOOL)executeWithWorkerManager:(FBWorkerManager *)workerManager
 {
-    while (self.progress < 1.0) {
-        if (self.workerState != FBWorkerStateExecuting) {
-            return NO;
-        }
+    while (!self.stopped && self.progress < 1.0) {
         [NSThread sleepForTimeInterval:0.2];
         self.progress += 0.05;
         [workerManager notifyUpdatedWorker:self];
     }
-    return YES;
+    return !self.stopped;
+}
+
+- (void)suspendWithWorkerManager:(FBWorkerManager*)workerManager
+{
+    self.stopped = YES;
+}
+
+- (void)resumeWithWorkerManager:(FBWorkerManager*)workerManager
+{
+    self.stopped = NO;
+}
+
+- (void)cancelWithWorkerManager:(FBWorkerManager*)workerManager
+{
+    self.stopped = YES;
 }
 
 @end

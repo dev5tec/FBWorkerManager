@@ -171,19 +171,19 @@
 
 - (IBAction)cancelAllWorkers:(id)sender
 {    
-    [self.workerManager cancelAll];
+    [self.workerManager cancelAllWorkers];
     [self.tableView reloadData];
 }
 
 - (IBAction)pauseAllWorkers:(id)sender
 {
-    [self.workerManager suspendAll];
+    [self.workerManager suspend];
     [self.tableView reloadData];
 }
 
 - (IBAction)resumeAllWorkers:(id)sender
 {
-    [self.workerManager resumeAll];
+    [self.workerManager resume];
     [self.tableView reloadData];
 }
 
@@ -245,12 +245,11 @@ static NSInteger finishedCounter_ = 0;
 
 #pragma mark -
 #pragma mark FBWorkerManagerSource
-- (id <FBWorker>)nextWorker
+- (id <FBWorker>)nextWorkerWithWorkerManager:(FBWorkerManager*)workerManager
 {
     NSArray* copiedList = [[self.list copy] autorelease];
     for (SampleWorker* sample in copiedList) {
         if (sample.workerState == FBWorkerStateWaiting) {
-            sample.workerState = FBWorkerStateExecuting;
             return sample;
         }
         

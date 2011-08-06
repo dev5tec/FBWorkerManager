@@ -12,5 +12,6 @@
 @interface SampleWorker : NSObject <FBWorker> 
 @property (nonatomic, copy) NSString* title;
 @property (nonatomic, retain) NSDate* time;
-@property (nonatomic, assign) CGFloat progress;
+@property (assign) CGFloat progress;
+@property (assign) BOOL stopped;
 @end

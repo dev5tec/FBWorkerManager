@@ -29,8 +29,8 @@
 		4C4B823D13E64421008A7088 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821B13E64420008A7088 /* Foundation.framework */; };
 		4C4B823E13E64421008A7088 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4B821D13E64420008A7088 /* CoreGraphics.framework */; };
 		4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824413E64421008A7088 /* InfoPlist.strings */; };
-		4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */; };
-		4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */; };
+		4C4B824813E64421008A7088 /* FBWorkerManagerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 4C4B824713E64421008A7088 /* FBWorkerManagerTests.h */; };
+		4C4B824A13E64421008A7088 /* FBWorkerManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B824913E64421008A7088 /* FBWorkerManagerTests.m */; };
 		4C4B825613E6449A008A7088 /* FBWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* FBWorkerManager.m */; };
 		4C4B825713E6449A008A7088 /* FBWorkerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B825513E6449A008A7088 /* FBWorkerManager.m */; };
 /* End PBXBuildFile section */
@@ -72,8 +72,8 @@
 		4C4B823A13E64421008A7088 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4C4B824313E64421008A7088 /* FBWorkerManagerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBWorkerManagerTests-Info.plist"; sourceTree = "<group>"; };
 		4C4B824513E64421008A7088 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LKWorkerManagerTests.h; sourceTree = "<group>"; };
-		4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LKWorkerManagerTests.m; sourceTree = "<group>"; };
+		4C4B824713E64421008A7088 /* FBWorkerManagerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBWorkerManagerTests.h; sourceTree = "<group>"; };
+		4C4B824913E64421008A7088 /* FBWorkerManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FBWorkerManagerTests.m; sourceTree = "<group>"; };
 		4C4B825413E6449A008A7088 /* FBWorkerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorkerManager.h; sourceTree = "<group>"; };
 		4C4B825513E6449A008A7088 /* FBWorkerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = FBWorkerManager.m; sourceTree = "<group>"; };
 		4C4B825813E644AB008A7088 /* FBWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = FBWorker.h; sourceTree = "<group>"; };
@@ -171,8 +171,8 @@
 		4C4B824113E64421008A7088 /* LKWorkerManagerTests */ = {
 			isa = PBXGroup;
 			children = (
-				4C4B824713E64421008A7088 /* LKWorkerManagerTests.h */,
-				4C4B824913E64421008A7088 /* LKWorkerManagerTests.m */,
+				4C4B824713E64421008A7088 /* FBWorkerManagerTests.h */,
+				4C4B824913E64421008A7088 /* FBWorkerManagerTests.m */,
 				4C4B824213E64421008A7088 /* Supporting Files */,
 			);
 			name = LKWorkerManagerTests;
@@ -283,7 +283,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C4B824613E64421008A7088 /* InfoPlist.strings in Resources */,
-				4C4B824813E64421008A7088 /* LKWorkerManagerTests.h in Resources */,
+				4C4B824813E64421008A7088 /* FBWorkerManagerTests.h in Resources */,
 				4C0E5A8313E7E3B500D56EDE /* MyCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,7 +324,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C4B824A13E64421008A7088 /* LKWorkerManagerTests.m in Sources */,
+				4C4B824A13E64421008A7088 /* FBWorkerManagerTests.m in Sources */,
 				4C4B825713E6449A008A7088 /* FBWorkerManager.m in Sources */,
 				4C0E5A8013E7E3A500D56EDE /* MyCell.m in Sources */,
 			);

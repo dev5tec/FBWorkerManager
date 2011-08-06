@@ -28,7 +28,7 @@
 #pragma mark -
 @protocol FBWorkerManagerSource <NSObject>
 
-- (id <FBWorker>)nextWorker;
+- (id <FBWorker>)nextWorkerWithWorkerManager:(FBWorkerManager*)workerManager;
 
 @end
 
@@ -57,9 +57,9 @@ typedef enum {
 
 // API (properties)
 @property (nonatomic, assign) NSTimeInterval interval;
+@property (nonatomic, assign) NSUInteger maxWorkers;
 @property (nonatomic, assign) id <FBWorkerManagerDelegate> delegate;
 @property (nonatomic, assign) id <FBWorkerManagerSource> workerSource;
-@property (nonatomic, assign) NSUInteger maxWorkers;
 
 
 // API (properties, readonly)
@@ -68,9 +68,14 @@ typedef enum {
 
 // API (general)
 + (FBWorkerManager*)workerManager;
-- (void)start;
-- (void)stop;
 + (void)enableBackgroundTask;
+
+
+// API (control)
+- (BOOL)start;
+- (BOOL)stop;
+- (BOOL)suspend;
+- (BOOL)resume;
 
 
 // API (called by workers)
@@ -78,12 +83,9 @@ typedef enum {
 
 
 // API (manage workers)
-- (void)suspendAll;
-- (void)resumeAll;
-- (void)cancelAll;
+- (void)cancelAllWorkers;
 - (void)cancelWorker:(id <FBWorker>)worker;
 - (void)suspendWorker:(id <FBWorker>)worker;
 - (void)resumeWorker:(id <FBWorker>)worker;
-
 
 @end

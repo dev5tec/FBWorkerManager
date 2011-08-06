@@ -37,12 +37,15 @@ typedef enum {
 @property (assign) FBWorkerState workerState;
 
 @required
-// return: YES=finished / NO=suspended or canceled
+// NOTE: This method should be implemented as thread safe.
+// return| YES=finished / NO=suspended or canceled
 - (BOOL)executeWithWorkerManager:(FBWorkerManager*)workerManager;
 
 @optional
-- (void)didSuspendWithWorkerManager:(FBWorkerManager*)workerManager;
-- (void)didResumeWithWorkerManager:(FBWorkerManager*)workerManager;
-- (void)didCancelWithWorkerManager:(FBWorkerManager*)workerManager;
+
+// NOTE: Thease methods are called in main thread.
+- (void)suspendWithWorkerManager:(FBWorkerManager*)workerManager;
+- (void)resumeWithWorkerManager:(FBWorkerManager*)workerManager;
+- (void)cancelWithWorkerManager:(FBWorkerManager*)workerManager;
 
 @end
