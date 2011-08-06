@@ -61,13 +61,42 @@
     return (count < self.maxWorkers);
 }
 
-- (void)_setWorker:(id <FBWorker>)worker workerState:(FBWorkerState)workerSstate
+- (BOOL)_setWorker:(id <FBWorker>)worker workerState:(FBWorkerState)workerState
 {
-    [worker setWorkerState:workerSstate];
+    BOOL result = NO;
+
+    switch (workerState) {
+        case FBWorkerStateWaiting: // resume
+            result = (worker.workerState == FBWorkerStateSuspending);
+            break;
+            
+        case FBWorkerStateExecuting:
+            result = (worker.workerState == FBWorkerStateWaiting);
+            break;
+            
+        case FBWorkerStateSuspending:
+            result = (worker.workerState == FBWorkerStateExecuting ||
+                      worker.workerState == FBWorkerStateWaiting);
+            break;
+            
+        case FBWorkerStateCompleted:
+            result = (worker.workerState == FBWorkerStateExecuting);
+            break;
+            
+        case FBWorkerStateCanceled:
+            result = (worker.workerState != FBWorkerStateCompleted &&
+                      worker.workerState != FBWorkerStateCanceled);
+            break;
+    }
+
+    if (!result) {
+        return NO;
+    }
     
-    switch (workerSstate) {
-        case FBWorkerStateWaiting:
-            // TODO: resume ?
+    worker.workerState = workerState;
+
+    switch (workerState) {
+        case FBWorkerStateWaiting: // resume
             if ([worker respondsToSelector:@selector(resumeWithWorkerManager:)]) {
                 [worker resumeWithWorkerManager:self];
             }
@@ -84,9 +113,7 @@
             
         case FBWorkerStateCompleted:
             if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate didFinishWorkerManager:self worker:worker];
-                });
+                [self.delegate didFinishWorkerManager:self worker:worker];
             }
             break;
             
@@ -100,8 +127,8 @@
                 });
             }
             break;
-
     }
+    return YES;
 }
 
 - (void)_updateWorker:(id <FBWorker>)worker
@@ -185,6 +212,14 @@
 }
 
 #pragma mark -
+#pragma mark Properties
+- (BOOL)isRunning
+{
+    return (self.state == FBWorkerManagerStateRunning);
+}
+
+
+#pragma mark -
 #pragma mark API (General)
 
 + (FBWorkerManager*)workerManager
@@ -197,8 +232,8 @@
     if (self.state != FBWorkerManagerStateStopping) {
         return NO;
     }
-
     self.state = FBWorkerManagerStateRunning;
+    
     [self _check:nil];
     self.timer = [NSTimer scheduledTimerWithTimeInterval:self.interval
                                                   target:self
@@ -210,43 +245,15 @@
 
 - (BOOL)stop
 {
-    if (self.state == FBWorkerManagerStateStopping) {
-        return NO;
-    }
-
-    self.state = FBWorkerManagerStateStopping;
-    if ([self.timer isValid]) {
-        [self.timer invalidate];
-    }
-    [self cancelAllWorkers];
-    self.timer = nil;   
-    return YES;
-}
-
-
-- (BOOL)suspend
-{
     if (self.state != FBWorkerManagerStateRunning) {
         return NO;
     }
+    self.state = FBWorkerManagerStateStopping;
     
-    self.state = FBWorkerManagerStateSuspending;    
-    for (id <FBWorker> worker in self.workerSet) {
-        [self _setWorker:worker workerState:FBWorkerStateSuspending];
+    if ([self.timer isValid]) {
+        [self.timer invalidate];
     }
-    return YES;
-}
-
-- (BOOL)resume
-{
-    if (self.state != FBWorkerManagerStateSuspending) {
-        return NO;
-    }
-    
-    for (id <FBWorker> worker in self.workerSet) {
-        [self _setWorker:worker workerState:FBWorkerStateWaiting];
-    }
-    self.state = FBWorkerManagerStateRunning;
+    self.timer = nil;   
     return YES;
 }
 
@@ -318,38 +325,31 @@ static BOOL backgroundTaskEnabled_ = NO;
 #pragma mark -
 #pragma mark API (manage workers)
 
-- (void)cancelAllWorkers
+- (BOOL)suspendWorker:(id <FBWorker>)worker
 {
-    id <FBWorker> worker;
-    for (worker in self.workerSet) {
-        [self _setWorker:worker workerState:FBWorkerStateCanceled];
+    if ([self _setWorker:worker workerState:FBWorkerStateSuspending]) {
+        [self _updateWorker:worker];
+        return YES;
     }
-    [self.workerSet removeAllObjects];
-    
-    while ((worker = [self.workerSource nextWorkerWithWorkerManager:self])) {
-        [self _setWorker:worker workerState:FBWorkerStateCanceled];
-    }
+    return NO;
 }
 
-- (void)suspendWorker:(id <FBWorker>)worker
+- (BOOL)resumeWorker:(id <FBWorker>)worker
 {
-    [self _setWorker:worker workerState:FBWorkerStateSuspending];
-    [self _updateWorker:worker];
-}
-
-- (void)resumeWorker:(id <FBWorker>)worker
-{
-    [self _setWorker:worker workerState:FBWorkerStateWaiting];
-    [self _updateWorker:worker];
-    if (self.state == FBWorkerManagerStateSuspending) {
-        self.state = FBWorkerManagerStateRunning;
+    if ([self _setWorker:worker workerState:FBWorkerStateWaiting]) {
+        [self _updateWorker:worker];
+        return YES;
     }
+    return NO;
 }
 
-- (void)cancelWorker:(id <FBWorker>)worker
+- (BOOL)cancelWorker:(id <FBWorker>)worker
 {
-    [self _setWorker:worker workerState:FBWorkerStateCanceled];
-    [self.workerSet removeObject:worker];
+    if ([self _setWorker:worker workerState:FBWorkerStateCanceled]) {
+        [self _updateWorker:worker];
+        return YES;
+    }
+    return NO;
 }
 
 

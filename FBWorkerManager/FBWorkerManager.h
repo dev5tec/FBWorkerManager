@@ -48,8 +48,7 @@
 #pragma mark -
 typedef enum {
     FBWorkerManagerStateStopping = 0,
-    FBWorkerManagerStateRunning,
-    FBWorkerManagerStateSuspending,
+    FBWorkerManagerStateRunning
 } FBWorkerManagerState;
 
 
@@ -64,6 +63,7 @@ typedef enum {
 
 // API (properties, readonly)
 @property (assign, readonly) FBWorkerManagerState state;
+@property (nonatomic, assign, readonly) BOOL isRunning;
 
 
 // API (general)
@@ -74,8 +74,6 @@ typedef enum {
 // API (control)
 - (BOOL)start;
 - (BOOL)stop;
-- (BOOL)suspend;
-- (BOOL)resume;
 
 
 // API (called by workers)
@@ -83,9 +81,8 @@ typedef enum {
 
 
 // API (manage workers)
-- (void)cancelAllWorkers;
-- (void)cancelWorker:(id <FBWorker>)worker;
-- (void)suspendWorker:(id <FBWorker>)worker;
-- (void)resumeWorker:(id <FBWorker>)worker;
+- (BOOL)cancelWorker:(id <FBWorker>)worker;
+- (BOOL)suspendWorker:(id <FBWorker>)worker;
+- (BOOL)resumeWorker:(id <FBWorker>)worker;
 
 @end

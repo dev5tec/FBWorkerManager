@@ -108,37 +108,14 @@
 
     // stopping -> x
     STAssertFalse([self.workerManager stop], nil);
-    STAssertFalse([self.workerManager suspend], nil);
-    STAssertFalse([self.workerManager resume], nil);
 
     // stopping -> running
     STAssertTrue([self.workerManager start], nil);
     STAssertEquals(self.workerManager.state, FBWorkerManagerStateRunning, nil);
 
-    // running -> x
-    STAssertFalse([self.workerManager start], nil);
-    STAssertFalse([self.workerManager resume], nil);
-
     // running -> stopping
     STAssertTrue([self.workerManager stop], nil);
     STAssertEquals(self.workerManager.state, FBWorkerManagerStateStopping, nil);
-
-    // running -> suspending
-    [self.workerManager start];
-    STAssertTrue([self.workerManager suspend], nil); // from running
-    STAssertEquals(self.workerManager.state, FBWorkerManagerStateSuspending, nil);
-
-    // suspending -> x
-    STAssertFalse([self.workerManager suspend], nil);
-    STAssertFalse([self.workerManager start], nil);
-
-    // suspending -> running (resume)
-    STAssertTrue([self.workerManager resume], nil); // from suspending
-    STAssertEquals(self.workerManager.state, FBWorkerManagerStateRunning, nil);
-
-    // suspending -> stopping
-    [self.workerManager suspend];
-    STAssertTrue([self.workerManager stop], nil);
 
 }
 
@@ -265,110 +242,6 @@
 
 }
 
-- (void)testCancelAllWorkers1
-{
-    // wating -> cancel
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
-        [self.list addObject:worker];
-    }
-    
-    [self.workerManager cancelAllWorkers];
-    
-    int count = 0;
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateCanceled) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-}
-
-- (void)testCancelAllWorkers2
-{
-    // executing -> cancel
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
-        [self.list addObject:worker];
-    }
-    
-    self.workerManager.maxWorkers = TEST_WORKER_NUM;
-    [self.workerManager start];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-    [self.workerManager cancelAllWorkers];
-
-    int count = 0;
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateCanceled) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-}
-
-- (void)testCancelAllWorkers3
-{
-    // suspending -> cancel
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
-        [self.list addObject:worker];
-    }
-    
-    self.workerManager.maxWorkers = TEST_WORKER_NUM;
-    [self.workerManager start];
-    [self.workerManager suspend];
-    [self.workerManager cancelAllWorkers];
-    
-    int count = 0;
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateCanceled) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-}
-
-- (void)testSuspendAndResume
-{
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
-        [self.list addObject:worker];
-    }
-    
-    self.workerManager.maxWorkers = TEST_WORKER_NUM;
-    [self.workerManager start];
-    [self.workerManager suspend];
-    
-    int count = 0;
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateSuspending) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);    
-
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        [worker clear];
-    }    
-
-    [self.workerManager resume];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-    count = 0;
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateExecuting) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-}
-
-
 - (void)testStop
 {
     // (1) stop
@@ -377,45 +250,106 @@
         [self.list addObject:worker];
     }
     self.workerManager.maxWorkers = 0;
+
     [self.workerManager start];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
-    [self.workerManager stop];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
     
-    int count = 0;
+    TestWorker* worker;
+    // result)
+    // 0,5 : suspended
+    // 1,6 : canceled
+    // etc : completed    
+    
+    worker = [self.list objectAtIndex:0];
+    [self.workerManager suspendWorker:worker];
+    
+    worker = [self.list objectAtIndex:1];
+    [self.workerManager cancelWorker:worker];
+    
+    worker = [self.list objectAtIndex:5];
+    [self.workerManager suspendWorker:worker];
+    
+    worker = [self.list objectAtIndex:6];
+    [self.workerManager cancelWorker:worker];
+
+    [self.workerManager stop];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+    
+    int countOfExecuting = 0;
+    int countOfCompleted = 0;
+    int countOfCanceled = 0;
+    int countOfSuspending = 0;
+    int countOfAnother = 0;
+    
     for (int i=0; i < TEST_WORKER_NUM; i++) {
         TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateCanceled) {
-            count++;
+        switch (worker.workerState) {
+            case FBWorkerStateExecuting:
+                countOfExecuting++;
+                break;
+                
+            case FBWorkerStateCompleted:
+                countOfCompleted++;
+                break;
+                
+            case FBWorkerStateCanceled:
+                countOfCanceled++;
+                break;
+                
+            case FBWorkerStateSuspending:
+                countOfSuspending++;
+                break;
+                
+            default:
+                countOfAnother++;
+                break;
         }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-
-    // (2) add
-    for (int i=0; i < TEST_WORKER_NUM; i++) {
-        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
-        [self.list addObject:worker];
     }
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
-    count = 0;
-    for (int i=TEST_WORKER_NUM; i < TEST_WORKER_NUM*2; i++) {
-        TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateWaiting) {
-            count++;
-        }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
-
-    // (3) restart
+    STAssertEquals(countOfExecuting , 6, nil);
+    STAssertEquals(countOfCompleted , 0, nil);
+    STAssertEquals(countOfCanceled  , 2, nil);
+    STAssertEquals(countOfSuspending, 2, nil);
+    STAssertEquals(countOfAnother   , 0, nil);
+    
     [self.workerManager start];
-    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.5]];
-    count = 0;
-    for (int i=TEST_WORKER_NUM; i < TEST_WORKER_NUM*2; i++) {
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+
+    countOfExecuting = 0;
+    countOfCompleted = 0;
+    countOfCanceled = 0;
+    countOfSuspending = 0;
+    countOfAnother = 0;
+    
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
         TestWorker* worker = [self.list objectAtIndex:i];
-        if (worker.workerState == FBWorkerStateCompleted) {
-            count++;
+        switch (worker.workerState) {
+            case FBWorkerStateExecuting:
+                countOfExecuting++;
+                break;
+                
+            case FBWorkerStateCompleted:
+                countOfCompleted++;
+                break;
+                
+            case FBWorkerStateCanceled:
+                countOfCanceled++;
+                break;
+                
+            case FBWorkerStateSuspending:
+                countOfSuspending++;
+                break;
+                
+            default:
+                countOfAnother++;
+                break;
         }
-    }    
-    STAssertEquals(count, TEST_WORKER_NUM, nil);
+    }
+    STAssertEquals(countOfExecuting , 0, nil);
+    STAssertEquals(countOfCompleted , 6, nil);
+    STAssertEquals(countOfCanceled  , 2, nil);
+    STAssertEquals(countOfSuspending, 2, nil);
+    STAssertEquals(countOfAnother   , 0, nil);
+
 }
 
 - (void)testCanWorkerManagerRun
@@ -452,6 +386,99 @@
     }    
     STAssertEquals(count, TEST_WORKER_NUM, nil);
 }
+
+
+- (void)testManageWorker1
+{
+    TestWorker* worker;
+
+    // waiting ---------------
+    // [o] waiting -> canceled
+    worker = [[[TestWorker alloc] init] autorelease];
+    STAssertTrue([self.workerManager cancelWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+
+    // [o] waiting -> suspend
+    worker = [[[TestWorker alloc] init] autorelease];
+    STAssertTrue([self.workerManager suspendWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateSuspending, nil);
+    
+    // [x] waiting -> resume
+    worker = [[[TestWorker alloc] init] autorelease];
+    STAssertFalse([self.workerManager resumeWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateWaiting, nil);
+
+    // canceled ---------------
+    // [x] canceled -> canceled
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager cancelWorker:worker];
+    STAssertFalse([self.workerManager cancelWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+    
+    // [x] canceled -> suspend
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager cancelWorker:worker];
+    STAssertFalse([self.workerManager suspendWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+
+    // [x] canceled -> resume
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager cancelWorker:worker];
+    STAssertFalse([self.workerManager resumeWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+
+    // suspend ---------------
+    // [o] suspend -> canceled
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager suspendWorker:worker];
+    STAssertTrue([self.workerManager cancelWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+    
+    // [x] suspend -> suspend
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager suspendWorker:worker];
+    STAssertFalse([self.workerManager suspendWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateSuspending, nil);
+
+    // [o] suspend -> resume
+    worker = [[[TestWorker alloc] init] autorelease];
+    [self.workerManager suspendWorker:worker];
+    STAssertTrue([self.workerManager resumeWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateWaiting, nil);
+
+}
+
+- (void)testManageWorker2
+{
+    TestWorker* worker;
+    
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        worker = [[[TestWorker alloc] init] autorelease];
+        [self.list addObject:worker];
+    }
+
+    self.workerManager.maxWorkers = 0;
+    [self.workerManager start];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+
+    // executing ---------------
+    // [o] executing -> canceled
+    worker = [self.list objectAtIndex:0];
+    STAssertTrue([self.workerManager cancelWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+    
+    // [o] executing -> suspend
+    worker = [self.list objectAtIndex:1];
+    STAssertTrue([self.workerManager suspendWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateSuspending, nil);
+    
+    // [x] executing -> resume
+    worker = [self.list objectAtIndex:2];
+    STAssertFalse([self.workerManager resumeWorker:worker], nil);
+    STAssertEquals(worker.workerState, FBWorkerStateExecuting, nil);
+
+}
+
 
 // --- delegate test -----------
 - (BOOL)canWorkerManagerRun

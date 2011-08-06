@@ -170,21 +170,29 @@
 }
 
 - (IBAction)cancelAllWorkers:(id)sender
-{    
-    [self.workerManager cancelAllWorkers];
+{
+    for (id <FBWorker> worker in self.list) {
+        [self.workerManager cancelWorker:worker];
+    }
     [self.tableView reloadData];
 }
 
 - (IBAction)pauseAllWorkers:(id)sender
 {
-    [self.workerManager suspend];
+    [self.workerManager stop];
+    for (id <FBWorker> worker in self.list) {
+        [self.workerManager suspendWorker:worker];
+    }
     [self.tableView reloadData];
 }
 
 - (IBAction)resumeAllWorkers:(id)sender
 {
-    [self.workerManager resume];
+    for (id <FBWorker> worker in self.list) {
+        [self.workerManager resumeWorker:worker];
+    }
     [self.tableView reloadData];
+    [self.workerManager start];
 }
 
 - (IBAction)suspendResumeWorker:(id)sender event:(UIEvent*)event
