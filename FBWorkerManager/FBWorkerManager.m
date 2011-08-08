@@ -23,11 +23,13 @@
 #import "FBWorkerManager.h"
 
 #define FBWORKERMANAGER_TIMEINTERVAL_FOR_CHECK  1.0
+#define FBWORKERMANAGER_TIMOUT                  30
 #define FBWORKERMANAGER_MAX_WORKERS             1
 
 #pragma mark -
 @interface FBWorkerManager()
 @property (assign) FBWorkerManagerState state;
+@property (nonatomic, assign) NSTimeInterval interval;
 @property (nonatomic, retain) NSTimer* timer;
 @property (nonatomic, retain) NSMutableSet* workerSet;
 @end
@@ -38,6 +40,7 @@
 @synthesize delegate = delegate_;
 @synthesize maxWorkers = maxWorkers_;
 @synthesize interval = interval_;
+@synthesize timeout = timeout_;
 @synthesize state = state_;
 @synthesize workerSource = workerSource_;
 @synthesize timer = timer_;
@@ -87,6 +90,9 @@
             result = (worker.workerState != FBWorkerStateCompleted &&
                       worker.workerState != FBWorkerStateCanceled);
             break;
+        case FBWorkerStateTimeout:
+            result = (worker.workerState == FBWorkerStateExecuting);
+            break;
     }
 
     if (!result) {
@@ -115,6 +121,7 @@
             if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
                 [self.delegate didFinishWorkerManager:self worker:worker];
             }
+            [self.workerSet removeObject:worker];
             break;
             
         case FBWorkerStateCanceled:
@@ -122,10 +129,19 @@
                 [worker cancelWithWorkerManager:self];
             }
             if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate didFinishWorkerManager:self worker:worker];
-                });
+                [self.delegate didFinishWorkerManager:self worker:worker];
             }
+            [self.workerSet removeObject:worker];
+            break;
+
+        case FBWorkerStateTimeout:
+            if ([worker respondsToSelector:@selector(timeoutWithWorkerManager:)]) {
+                [worker timeoutWithWorkerManager:self];
+            }
+            if ([self.delegate respondsToSelector:@selector(didFinishWorkerManager:worker:)]) {
+                [self.delegate didFinishWorkerManager:self worker:worker];
+            }
+            [self.workerSet removeObject:worker];
             break;
     }
     return YES;
@@ -157,7 +173,6 @@
             if ([worker executeWithWorkerManager:self]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self _setWorker:worker workerState:FBWorkerStateCompleted];                
-                    [self.workerSet removeObject:worker];
                 });
             }
         });
@@ -168,11 +183,28 @@
     }
 }
 
+- (void)_updateElapse
+{
+    for (id <FBWorker> worker in [NSSet setWithSet:self.workerSet]) {
+        if (worker.workerState == FBWorkerStateExecuting) {
+            worker.workerElapse += self.interval;
+            if (self.timeout && worker.workerElapse > self.timeout) {
+                [self _setWorker:worker workerState:FBWorkerStateTimeout];
+                if ([worker respondsToSelector:@selector(timeoutWithWorkerManager:)]) {
+                    [worker timeoutWithWorkerManager:self];
+                }
+            }
+        }
+    }
+}
+
 - (void)_check:(NSTimer*)timer
 {
     if (self.state != FBWorkerManagerStateRunning) {
         return;
     }
+
+    [self _updateElapse];
 
     if ([self.delegate respondsToSelector:@selector(canWorkerManagerRun)]) {
         if (![self.delegate canWorkerManagerRun]) {
@@ -194,6 +226,7 @@
     self = [super init];
     if (self) {
         self.interval = FBWORKERMANAGER_TIMEINTERVAL_FOR_CHECK;
+        self.timeout = FBWORKERMANAGER_TIMOUT;
         self.state = FBWorkerManagerStateStopping;
         self.maxWorkers = FBWORKERMANAGER_MAX_WORKERS;
         self.workerSet = [NSMutableSet set];

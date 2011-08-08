@@ -55,7 +55,7 @@ typedef enum {
 @interface FBWorkerManager : NSObject
 
 // API (properties)
-@property (nonatomic, assign) NSTimeInterval interval;
+@property (nonatomic, assign) NSUInteger timeout;   // [sec]
 @property (nonatomic, assign) NSUInteger maxWorkers;
 @property (nonatomic, assign) id <FBWorkerManagerDelegate> delegate;
 @property (nonatomic, assign) id <FBWorkerManagerSource> workerSource;

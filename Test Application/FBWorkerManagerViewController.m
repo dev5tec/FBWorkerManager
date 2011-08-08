@@ -56,6 +56,7 @@
         self.workerManager.delegate = self;
         self.workerManager.workerSource = self;
         self.workerManager.maxWorkers = 3;
+        self.workerManager.timeout = 4.0;
         [self.workerManager start];
     }
 }
@@ -138,6 +139,14 @@
             cell.stopStartButton.hidden = YES;
             cell.cancelButton.hidden = YES;
             cell.label.text = @"Canceled";
+            break;
+
+        case FBWorkerStateTimeout:
+            [cell.indicator stopAnimating];        
+            cell.progressView.hidden = NO;
+            cell.stopStartButton.hidden = YES;
+            cell.cancelButton.hidden = YES;
+            cell.label.text = @"Timeout";
             break;
 
     }

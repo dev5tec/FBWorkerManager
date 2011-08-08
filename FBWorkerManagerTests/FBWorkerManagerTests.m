@@ -23,7 +23,7 @@
 @end
 
 @implementation TestWorker
-@synthesize workerState;
+@synthesize workerState, workerElapse;
 @synthesize stopped, step;
 
 - (void)clear
@@ -33,6 +33,7 @@
 
 - (BOOL)executeWithWorkerManager:(FBWorkerManager*)workerManager
 {
+    // total: 2[sec]
     for (int i=0; i < 10; i++) {
         [NSThread sleepForTimeInterval:0.2];
         [workerManager notifyUpdatedWorker:self];
@@ -58,11 +59,16 @@
     self.stopped = YES;
 }
 
+- (void)timeoutWithWorkerManager:(FBWorkerManager*)workerManager
+{
+    self.stopped = YES;
+}
+
 @end
 
 //------------------------------------------------------------------------------
 @implementation FBWorkerManagerTests
-@synthesize workerManager, list, canNotRun;
+@synthesize workerManager, list, canNotRun, testDelegate;
 
 #define TEST_WORKER_NUM 10
 
@@ -73,6 +79,7 @@
     self.workerManager.delegate = self;
     self.workerManager.workerSource = self;
     self.list = [NSMutableArray array];
+    self.testDelegate = YES;
 }
 
 
@@ -96,8 +103,8 @@
 
 - (void)testProperties
 {
-    self.workerManager.interval = 9999;
-    STAssertEquals(self.workerManager.interval, (NSTimeInterval)9999, nil);
+    self.workerManager.timeout = 9999;
+    STAssertEquals(self.workerManager.timeout, (NSUInteger)9999, nil);
     self.workerManager.maxWorkers = 8888;
     STAssertEquals(self.workerManager.maxWorkers, (NSUInteger)8888, nil);
 }
@@ -382,15 +389,57 @@
         if (worker.workerState == FBWorkerStateCompleted) {
             count++;
         }
-        NSLog(@"1:%d", worker.workerState);
     }    
     STAssertEquals(count, TEST_WORKER_NUM, nil);
+}
+
+- (void)testTimeout
+{
+    // (1) timeout 1[sec] => all timeout
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
+        [self.list addObject:worker];
+    }
+    self.workerManager.timeout = 1;
+    self.workerManager.maxWorkers = 0;
+    [self.workerManager start];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.5]];
+    
+    int count = 0;
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        TestWorker* worker = [self.list objectAtIndex:i];
+        if (worker.workerState == FBWorkerStateTimeout) {
+            count++;
+        }
+    }    
+    STAssertEquals(count, TEST_WORKER_NUM, nil);
+
+    // (2) timeout 3[sec] => all ok
+    self.workerManager.timeout = 3;
+
+    self.list = [NSMutableArray array];
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        TestWorker* worker = [[[TestWorker alloc] init] autorelease];
+        [self.list addObject:worker];
+    }
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0]];
+    
+    count = 0;
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        TestWorker* worker = [self.list objectAtIndex:i];
+        if (worker.workerState == FBWorkerStateCompleted) {
+            count++;
+        }
+    }    
+    STAssertEquals(count, TEST_WORKER_NUM, nil);
+
 }
 
 
 - (void)testManageWorker1
 {
     TestWorker* worker;
+    self.testDelegate = NO;
 
     // waiting ---------------
     // [o] waiting -> canceled
@@ -488,29 +537,40 @@
 
 - (void)willBeginWorkerManager:(FBWorkerManager*)workerManager worker:(id <FBWorker>)worker
 {
-    STAssertEquals(worker.workerState, FBWorkerStateExecuting, nil);
-    TestWorker* testWorker = (TestWorker*)worker;
-    STAssertEquals(testWorker.step, 0, nil);
-    testWorker.step++;
+    if (self.testDelegate) {
+        STAssertEquals(worker.workerState, FBWorkerStateExecuting, nil);
+        TestWorker* testWorker = (TestWorker*)worker;
+        STAssertEquals(testWorker.step, 0, nil);
+        testWorker.step++;
+    }
 }
 
 - (void)didUpdateWorkerManager:(FBWorkerManager*)workerManager worker:(id <FBWorker>)worker
 {
-    TestWorker* testWorker = (TestWorker*)worker;
-    if (testWorker.step == 1) {
-        testWorker.step++;
+    if (self.testDelegate) {
+        TestWorker* testWorker = (TestWorker*)worker;
+        if (testWorker.step == 1) {
+            testWorker.step++;
+        }
     }
 }
 
 - (void)didFinishWorkerManager:(FBWorkerManager*)workerManager worker:(id <FBWorker>)worker
 {
-    TestWorker* testWorker = (TestWorker*)worker;
-    if (testWorker.stopped) {
-        STAssertEquals(testWorker.workerState, FBWorkerStateCanceled, nil);
-    } else {
-        STAssertEquals(testWorker.workerState, FBWorkerStateCompleted, nil);        
+    if (self.testDelegate) {
+       TestWorker* testWorker = (TestWorker*)worker;
+        if (testWorker.stopped) {
+            if (testWorker.workerElapse > self.workerManager.timeout) {
+                STAssertEquals(testWorker.workerState, FBWorkerStateTimeout, nil);
+            } else {
+                STAssertEquals(testWorker.workerState, FBWorkerStateCanceled, nil);
+            }
+        } else {
+            STAssertEquals(testWorker.workerState, FBWorkerStateCompleted, nil);        
+        }
+        STAssertEquals(testWorker.step, 2, nil);
     }
-    STAssertEquals(testWorker.step, 2, nil);
 }
+
 
 @end

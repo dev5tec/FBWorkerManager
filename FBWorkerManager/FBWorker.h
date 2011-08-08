@@ -27,7 +27,8 @@ typedef enum {
     FBWorkerStateExecuting,
     FBWorkerStateCompleted,
     FBWorkerStateCanceled,
-    FBWorkerStateSuspending
+    FBWorkerStateSuspending,
+    FBWorkerStateTimeout
 } FBWorkerState;
 
 
@@ -35,6 +36,7 @@ typedef enum {
 @protocol FBWorker <NSObject>
 
 @property (assign) FBWorkerState workerState;
+@property (assign) NSTimeInterval workerElapse;
 
 @required
 // NOTE: This method should be implemented as thread safe.
@@ -47,5 +49,5 @@ typedef enum {
 - (void)suspendWithWorkerManager:(FBWorkerManager*)workerManager;
 - (void)resumeWithWorkerManager:(FBWorkerManager*)workerManager;
 - (void)cancelWithWorkerManager:(FBWorkerManager*)workerManager;
-
+- (void)timeoutWithWorkerManager:(FBWorkerManager*)workerManager;
 @end

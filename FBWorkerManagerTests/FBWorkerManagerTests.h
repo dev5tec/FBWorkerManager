@@ -14,4 +14,6 @@
 @property (nonatomic, retain) FBWorkerManager* workerManager;
 @property (nonatomic, retain) NSMutableArray* list;
 @property (nonatomic, assign) BOOL canNotRun;
+@property (nonatomic, assign) BOOL testDelegate;
+
 @end

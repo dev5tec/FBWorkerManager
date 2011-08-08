@@ -10,15 +10,23 @@
 #import "FBWorkerManager.h"
 
 @implementation SampleWorker
-@synthesize title, workerState, time, progress, stopped;
+@synthesize title, time, progress, stopped;
+@synthesize workerState, workerElapse;
 - (BOOL)executeWithWorkerManager:(FBWorkerManager *)workerManager
 {
+    float inc = ((rand() % 10) + 1)/ 100.0;
     while (!self.stopped && self.progress < 1.0) {
         [NSThread sleepForTimeInterval:0.2];
-        self.progress += 0.05;
+        self.progress += inc;
         [workerManager notifyUpdatedWorker:self];
     }
     return !self.stopped;
+    
+    // memo:
+    //  'while (!self.stopped && self.progress < 1.0) {'
+    //    can be written as
+    //  'while ((self.workerState == FBWorkerStateExecuting) && self.progress < 1.0) {'
+
 }
 
 - (void)suspendWithWorkerManager:(FBWorkerManager*)workerManager
@@ -32,6 +40,11 @@
 }
 
 - (void)cancelWithWorkerManager:(FBWorkerManager*)workerManager
+{
+    self.stopped = YES;
+}
+
+- (void)timeoutWithWorkerManager:(FBWorkerManager*)workerManager
 {
     self.stopped = YES;
 }
