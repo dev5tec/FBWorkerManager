@@ -358,6 +358,15 @@ static BOOL backgroundTaskEnabled_ = NO;
 #pragma mark -
 #pragma mark API (manage workers)
 
+- (BOOL)cancelWorker:(id <FBWorker>)worker
+{
+    if ([self _setWorker:worker workerState:FBWorkerStateCanceled]) {
+        [self _updateWorker:worker];
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)suspendWorker:(id <FBWorker>)worker
 {
     if ([self _setWorker:worker workerState:FBWorkerStateSuspending]) {
@@ -376,15 +385,25 @@ static BOOL backgroundTaskEnabled_ = NO;
     return NO;
 }
 
-- (BOOL)cancelWorker:(id <FBWorker>)worker
+- (void)cancelAllWorker
 {
-    if ([self _setWorker:worker workerState:FBWorkerStateCanceled]) {
-        [self _updateWorker:worker];
-        return YES;
+    for (id <FBWorker> worker in [self.workerSet allObjects]) {
+        [self cancelWorker:worker];
     }
-    return NO;
 }
 
+- (void)suspendAllWorker
+{
+    for (id <FBWorker> worker in self.workerSet) {
+        [self suspendWorker:worker];
+    }    
+}
 
+- (void)resumeAllWorker
+{
+    for (id <FBWorker> worker in self.workerSet) {
+        [self resumeWorker:worker];
+    }
+}
 
 @end

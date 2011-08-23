@@ -528,6 +528,36 @@
 
 }
 
+- (void)testManageAllWorkers
+{
+    TestWorker* worker;
+    
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        worker = [[[TestWorker alloc] init] autorelease];
+        [self.list addObject:worker];
+    }
+    self.workerManager.maxWorkers = 0;
+    [self.workerManager start];
+    [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
+
+    [self.workerManager suspendAllWorker];
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        worker = [self.list objectAtIndex:i];
+        STAssertEquals(worker.workerState, FBWorkerStateSuspending, nil);
+    }
+
+    [self.workerManager resumeAllWorker];
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        worker = [self.list objectAtIndex:i];
+        STAssertEquals(worker.workerState, FBWorkerStateWaiting, nil);
+    }
+
+    [self.workerManager cancelAllWorker];
+    for (int i=0; i < TEST_WORKER_NUM; i++) {
+        worker = [self.list objectAtIndex:i];
+        STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);
+    }
+}
 
 // --- delegate test -----------
 - (BOOL)canWorkerManagerRun

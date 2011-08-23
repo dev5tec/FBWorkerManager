@@ -85,4 +85,8 @@ typedef enum {
 - (BOOL)suspendWorker:(id <FBWorker>)worker;
 - (BOOL)resumeWorker:(id <FBWorker>)worker;
 
+- (void)cancelAllWorker;
+- (void)suspendAllWorker;
+- (void)resumeAllWorker;
+
 @end
