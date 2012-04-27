@@ -52,7 +52,7 @@
     
     if (self.list == nil) {
         self.list = [NSMutableArray array];
-        self.workerManager = [FBWorkerManager workerManager];
+        self.workerManager = [FBWorkerManager workerManagerWithAnsynchronous:YES];
         self.workerManager.delegate = self;
         self.workerManager.workerSource = self;
         self.workerManager.maxWorkers = 3;

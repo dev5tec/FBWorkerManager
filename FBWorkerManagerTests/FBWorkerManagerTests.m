@@ -540,19 +540,19 @@
     [self.workerManager start];
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.5]];
 
-    [self.workerManager suspendAllWorker];
+    [self.workerManager suspendAllWorkers];
     for (int i=0; i < TEST_WORKER_NUM; i++) {
         worker = [self.list objectAtIndex:i];
         STAssertEquals(worker.workerState, FBWorkerStateSuspending, nil);
     }
 
-    [self.workerManager resumeAllWorker];
+    [self.workerManager resumeAllWorkers];
     for (int i=0; i < TEST_WORKER_NUM; i++) {
         worker = [self.list objectAtIndex:i];
         STAssertEquals(worker.workerState, FBWorkerStateWaiting, nil);
     }
 
-    [self.workerManager cancelAllWorker];
+    [self.workerManager cancelAllWorkers];
     for (int i=0; i < TEST_WORKER_NUM; i++) {
         worker = [self.list objectAtIndex:i];
         STAssertEquals(worker.workerState, FBWorkerStateCanceled, nil);

@@ -32,6 +32,7 @@
 @property (nonatomic, assign) NSTimeInterval interval;
 @property (nonatomic, retain) NSTimer* timer;
 @property (nonatomic, retain) NSMutableSet* workerSet;
+@property (nonatomic, assign) BOOL isAsynchronous;
 @end
 
 
@@ -45,6 +46,7 @@
 @synthesize workerSource = workerSource_;
 @synthesize timer = timer_;
 @synthesize workerSet = workerSet_;
+@synthesize isAsynchronous = isAsynchronous_;
 
 #pragma mark -
 #pragma mark Privates
@@ -156,7 +158,7 @@
     }
 }
 
-- (void)_startThread
+- (void)_runWorker
 {
     id <FBWorker> worker;
 
@@ -168,14 +170,22 @@
             [self.delegate willBeginWorkerManager:self worker:worker];
         }
 
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (self.isAsynchronous) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
+                if ([worker executeWithWorkerManager:self]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self _setWorker:worker workerState:FBWorkerStateCompleted];                
+                    });
+                }
+            });
+        } else {
             if ([worker executeWithWorkerManager:self]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self _setWorker:worker workerState:FBWorkerStateCompleted];                
                 });
             }
-        });
+        }
         
         if (![self _checkMaxWorkers]) {
             break;
@@ -213,7 +223,7 @@
     }
     
     if ([self _checkMaxWorkers]) {
-        [self _startThread];
+        [self _runWorker];
     }
 }
 
@@ -221,7 +231,7 @@
 #pragma mark -
 #pragma mark Basics
 
-- (id)init
+- (id)initWithAsynchronous:(BOOL)asynchronous
 {
     self = [super init];
     if (self) {
@@ -230,6 +240,7 @@
         self.state = FBWorkerManagerStateStopping;
         self.maxWorkers = FBWORKERMANAGER_MAX_WORKERS;
         self.workerSet = [NSMutableSet set];
+        self.isAsynchronous = asynchronous;
     }
     
     return self;
@@ -255,9 +266,9 @@
 #pragma mark -
 #pragma mark API (General)
 
-+ (FBWorkerManager*)workerManager
++ (FBWorkerManager*)workerManagerWithAnsynchronous:(BOOL)asynchronous
 {
-    return [[[self alloc] init] autorelease];
+    return [[[self alloc] initWithAsynchronous:asynchronous] autorelease];
 }
 
 - (BOOL)start
@@ -298,7 +309,7 @@ static BOOL backgroundTaskEnabled_ = NO;
 {
     UIApplication* app = [UIApplication sharedApplication];
     
-    NSAssert(backgroundTaskIdentifer_ == UIBackgroundTaskInvalid, nil);
+    NSAssert(backgroundTaskIdentifer_ == UIBackgroundTaskInvalid, @"UIBackgroundTaskInvalid");
     
     backgroundTaskIdentifer_ = [app beginBackgroundTaskWithExpirationHandler:^{
         
@@ -354,6 +365,11 @@ static BOOL backgroundTaskEnabled_ = NO;
     [self _updateWorker:worker];
 }
 
+- (void)notifyFinishedWorker:(id <FBWorker>)worker
+{
+    [self _setWorker:worker workerState:FBWorkerStateCompleted];
+}
+
 
 #pragma mark -
 #pragma mark API (manage workers)
@@ -385,21 +401,21 @@ static BOOL backgroundTaskEnabled_ = NO;
     return NO;
 }
 
-- (void)cancelAllWorker
+- (void)cancelAllWorkers
 {
     for (id <FBWorker> worker in [self.workerSet allObjects]) {
         [self cancelWorker:worker];
     }
 }
 
-- (void)suspendAllWorker
+- (void)suspendAllWorkers
 {
     for (id <FBWorker> worker in self.workerSet) {
         [self suspendWorker:worker];
     }    
 }
 
-- (void)resumeAllWorker
+- (void)resumeAllWorkers
 {
     for (id <FBWorker> worker in self.workerSet) {
         [self resumeWorker:worker];

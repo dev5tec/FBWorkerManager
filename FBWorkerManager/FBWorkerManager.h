@@ -59,7 +59,7 @@ typedef enum {
 @property (nonatomic, assign) NSUInteger maxWorkers;
 @property (nonatomic, assign) id <FBWorkerManagerDelegate> delegate;
 @property (nonatomic, assign) id <FBWorkerManagerSource> workerSource;
-
+@property (nonatomic, assign, readonly) BOOL isAsynchronous;
 
 // API (properties, readonly)
 @property (assign, readonly) FBWorkerManagerState state;
@@ -67,7 +67,7 @@ typedef enum {
 
 
 // API (general)
-+ (FBWorkerManager*)workerManager;
++ (FBWorkerManager*)workerManagerWithAnsynchronous:(BOOL)asynchronous;
 + (void)enableBackgroundTask;
 
 
@@ -78,15 +78,15 @@ typedef enum {
 
 // API (called by workers)
 - (void)notifyUpdatedWorker:(id <FBWorker>)worker;
-
+- (void)notifyFinishedWorker:(id <FBWorker>)worker;
 
 // API (manage workers)
 - (BOOL)cancelWorker:(id <FBWorker>)worker;
 - (BOOL)suspendWorker:(id <FBWorker>)worker;
 - (BOOL)resumeWorker:(id <FBWorker>)worker;
 
-- (void)cancelAllWorker;
-- (void)suspendAllWorker;
-- (void)resumeAllWorker;
+- (void)cancelAllWorkers;
+- (void)suspendAllWorkers;
+- (void)resumeAllWorkers;
 
 @end
